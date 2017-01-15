@@ -25,8 +25,13 @@ public class Model {
 	List<QuizCountry> quizCountries;
 	int index;
 	private Long seed;
+	
+	private QuizCountry[] asia;
+	private QuizCountry[] africa;
 	private QuizCountry[] northAmerica;
+	private QuizCountry[] southAmerica;
 	private QuizCountry[] europe;
+	private QuizCountry[] australia;
 	
 	public Model() {
 		this(null);
@@ -34,14 +39,26 @@ public class Model {
 
 	Model(Long seed) {
 		this.seed = seed;
+		
+		QuizCountry RUS = new QuizCountry("RUS");
+		asia = new QuizCountry[] { RUS };
+		
+		QuizCountry DZA = new QuizCountry("DZA");
+		africa = new QuizCountry[] { DZA };
+		
 		QuizCountry USA = new QuizCountry("USA");
 		QuizCountry CAN = new QuizCountry("CAN");
+		northAmerica = new QuizCountry[] { USA, CAN };
+		
+		QuizCountry BRA = new QuizCountry("BRA");
+		southAmerica = new QuizCountry[] { BRA };
 		
 		QuizCountry GBR = new QuizCountry("GBR");
 		QuizCountry IRL = new QuizCountry("IRL");
-
-		northAmerica = new QuizCountry[] { USA, CAN };
 		europe = new QuizCountry[] { GBR, IRL };
+		
+		QuizCountry AUS = new QuizCountry("AUS");
+		australia = new QuizCountry[] { AUS };
 		
 		changeQuizCountries("NA");
 		
@@ -83,11 +100,23 @@ public class Model {
 	}
 	
 	public void changeQuizCountries(String region) {
-		if (region.equals("NA")) {
+		if (region.equals("AS")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(asia));
+		}
+		else if (region.equals("AF")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(africa));
+		}
+		else if (region.equals("NA")) {
 			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(northAmerica));
+		}
+		else if (region.equals("SA")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(southAmerica));
 		}
 		else if (region.equals("EU")) {
 			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(europe));
+		}
+		else if (region.equals("AU")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(australia));
 		}
 		else {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));

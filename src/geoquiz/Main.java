@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private World world;
+	private ToggleGroup regions;
 
 	@SuppressWarnings("unchecked")
 	@Override 
@@ -38,13 +39,16 @@ public class Main extends Application {
 	
 			VBox options = new VBox();
 			Text result = new Text();
-			ToggleGroup region = new ToggleGroup();
-			RadioButton northAmerica = new RadioButton("North America");
-			northAmerica.setUserData("NA");
-			RadioButton europe = new RadioButton("Europe");
-			europe.setUserData("EU");
+			regions = new ToggleGroup();
 			
-			region.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+			RadioButton asia = newRegion("Asia", "AS");
+			RadioButton africa = newRegion("Africa", "AF");
+			RadioButton northAmerica = newRegion("North America", "NA");
+			RadioButton southAmerica = newRegion("South America", "SA");
+			RadioButton europe = newRegion("Europe", "EU");
+			RadioButton australia = newRegion("Australia", "AU");
+			
+			regions.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 					String code = (String)newToggle.getUserData();
 					model.changeQuizCountries(code);
@@ -52,11 +56,9 @@ public class Main extends Application {
 			    }
 			});
 			
-			northAmerica.setToggleGroup(region);
-			europe.setToggleGroup(region);
 			northAmerica.setSelected(true);
 	
-			options.getChildren().addAll(result, northAmerica, europe);
+			options.getChildren().addAll(result, asia, africa, northAmerica, southAmerica, europe, australia);
 			
 			quiz.getChildren().addAll(flag, options);
 			
@@ -94,6 +96,13 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private RadioButton newRegion(String name, String abbreviation) {
+		RadioButton region = new RadioButton(name);
+		region.setUserData(abbreviation);
+		region.setToggleGroup(regions);
+		return region;
 	}
 
 	@Override 
