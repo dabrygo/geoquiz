@@ -55,10 +55,13 @@ public class Main extends Application {
 					CountryPath countryPath = (CountryPath) evt.getSource();
 					Locale      locale      = countryPath.getLocale();
 					if (locale.getISO3Country().equals(quizCountries.get(index).name)) {
-						result.setText("Correct!");
 						if (index < quizCountries.size() - 1) {
 							index++;
+							result.setText("");
 							flag.setImage(quizCountries.get(index).flag);	
+						}
+						else {
+							flag.setImage(null);
 						}
 					}
 					else {
