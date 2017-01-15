@@ -6,10 +6,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class TestModel {
-
+	@Rule 
+	public ExpectedException thrown = ExpectedException.none();
+	
 	private Model model;
 
 	@Before
@@ -50,5 +54,23 @@ public class TestModel {
 		completeAllQuestions();
 		assertEquals("", model.getNameOfCountry());
 	}
-
+	
+	@Test
+	public void test_number_completed_increments_when_next_country_called() {
+		model.nextCountry();
+		assertEquals(1, model.completed);
+	}
+	
+	@Test
+	public void test_number_completed_resets_when_new_continent_chosen() {
+		model.nextCountry();
+		model.changeQuizCountries("AS");
+		assertEquals(0, model.completed);
+	}
+	
+	@Test
+	public void test_illegal_continent_code_throws_exception() {
+		thrown.expect(IllegalArgumentException.class);
+		model.changeQuizCountries("XXX");
+	}
 }

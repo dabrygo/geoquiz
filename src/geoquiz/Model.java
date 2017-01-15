@@ -95,7 +95,9 @@ public class Model {
 	
 	public Image nextCountry() {
 		completed++;
-		quizCountries.remove(index);			
+		if (index < quizCountries.size()) {
+			quizCountries.remove(index);
+		}
 		if (!moreCountriesInQuiz()) {
 			return null; 
 		}
