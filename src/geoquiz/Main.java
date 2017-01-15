@@ -25,7 +25,6 @@ public class Main extends Application {
 	@SuppressWarnings("unchecked")
 	@Override 
 	public void start(Stage stage) {
-
 		FlowPane quiz = new FlowPane();
 		Model model = new Model();
 		ImageView flag = new ImageView(model.getFlagOfCountry());
@@ -58,7 +57,6 @@ public class Main extends Application {
 
 		StackPane map = new StackPane(world);
 		map.setBackground(new Background(new BackgroundFill(world.getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
-
 
 		quiz.getChildren().addAll(flag, result);
 		splitPane.getItems().addAll(map, quiz);

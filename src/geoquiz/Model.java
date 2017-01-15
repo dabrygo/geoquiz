@@ -12,7 +12,7 @@ public class Model {
 
 		public QuizCountry(String name) {
 			this.name = name;
-			this.flag = new Image(name + ".png");
+			this.flag = new Image("geoquiz/" + name + ".png");
 		}
 	}
 
