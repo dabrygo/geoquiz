@@ -52,7 +52,7 @@ public class TestModel {
 	@Test
 	public void test_name_of_country_when_all_questions_completed() {
 		completeAllQuestions();
-		assertEquals("", model.getNameOfCountry());
+		assertEquals("", model.getIsoOfCountry());
 	}
 	
 	@Test

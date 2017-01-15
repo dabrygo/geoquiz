@@ -22,6 +22,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -36,8 +37,14 @@ public class Main extends Application {
 		try {
 			FlowPane quiz = new FlowPane();
 			model = new Model();
+			
+			FlowPane clues = new FlowPane(	);
+			clues.setOrientation(Orientation.HORIZONTAL);
+			Text countryName = new Text(model.getNameOfCountry());
+			countryName.setFont(new Font(24.0));
 			ImageView flag = new ImageView(model.getFlagOfCountry());
-	
+			clues.getChildren().addAll(countryName, flag);
+			
 			VBox options = new VBox();
 			Text progress = new Text(progressText());
 			Text result = new Text();
@@ -54,6 +61,7 @@ public class Main extends Application {
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 					String code = (String)newToggle.getUserData();
 					model.changeQuizCountries(code);
+					countryName.setText(model.getNameOfCountry());
 					flag.setImage(model.getFlagOfCountry());
 					progress.setText(progressText());
 			    }
@@ -63,17 +71,18 @@ public class Main extends Application {
 	
 			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia);
 			
-			quiz.getChildren().addAll(flag, options);
+			quiz.getChildren().addAll(clues, options);
 			
 			world = WorldBuilder.create()
 					.resolution(Resolution.HI_RES)
 					.mousePressHandler(evt -> {
 						CountryPath countryPath = (CountryPath) evt.getSource();
 						Locale locale = countryPath.getLocale();
-						if (locale.getISO3Country().equals(model.getNameOfCountry())) {
+						if (locale.getISO3Country().equals(model.getIsoOfCountry())) {
 							result.setText("");
 							flag.setImage(model.nextCountry());	
 							progress.setText(progressText());
+							countryName.setText(model.getNameOfCountry());
 						}
 						else if (model.moreCountriesInQuiz()){
 							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
