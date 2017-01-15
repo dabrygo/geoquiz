@@ -34,7 +34,7 @@ public class Main extends Application {
 				.resolution(Resolution.HI_RES)
 				.mousePressHandler(evt -> {
 					CountryPath countryPath = (CountryPath) evt.getSource();
-					Locale      locale      = countryPath.getLocale();
+					Locale locale = countryPath.getLocale();
 					if (locale.getISO3Country().equals(model.getNameOfCountry())) {
 						result.setText("");
 						flag.setImage(model.flagOfNextCountry());	

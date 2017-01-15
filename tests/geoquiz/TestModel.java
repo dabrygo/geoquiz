@@ -1,11 +1,11 @@
 package geoquiz;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import geoquiz.Model.QuizCountry;
 
 public class TestModel {
 
@@ -21,13 +21,16 @@ public class TestModel {
 		assertTrue(model.moreCountriesInQuiz());
 	}
 
-	@SuppressWarnings("unused")
 	@Test
-	public void test_empty_quiz_when_all_countries_consumed() {
-		for (QuizCountry country : model.quizCountries) {
-			model.flagOfNextCountry();
-		}
+	public void test_empty_quiz_when_all_questions_completed() {
+		model.index = model.lastCountry();
 		assertFalse(model.moreCountriesInQuiz());
+	}
+	
+	@Test
+	public void test_null_flag_when_all_questions_completed() {
+		model.index = model.lastCountry();
+		assertNull(model.flagOfNextCountry());
 	}
 
 }

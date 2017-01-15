@@ -17,7 +17,7 @@ public class Model {
 	}
 
 	List<QuizCountry> quizCountries;
-	private int index;
+	int index;
 	
 	public Model() {
 		index = 0;
@@ -38,7 +38,11 @@ public class Model {
 	}
 	
 	public boolean moreCountriesInQuiz() {
-		return index < quizCountries.size() - 1;
+		return index < lastCountry();
+	}
+
+	int lastCountry() {
+		return quizCountries.size() - 1;
 	}
 	
 	public Image flagOfNextCountry() {
