@@ -35,13 +35,13 @@ public class TestModel {
 	@Test
 	public void test_null_flag_when_all_questions_completed() {
 		completeAllQuestions();
-		assertNull(model.flagOfNextCountry());
+		assertNull(model.nextCountry());
 	}
 	
 	@Test
 	public void test_one_less_country_when_move_to_next_question() {
 		int originalSize = model.countriesLeft();
-		model.flagOfNextCountry();
+		model.nextCountry();
 		assertTrue(model.countriesLeft() < originalSize);
 	}
 	

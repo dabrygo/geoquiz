@@ -28,16 +28,18 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	private World world;
 	private ToggleGroup regions;
+	private Model model;
 
 	@SuppressWarnings("unchecked")
 	@Override 
 	public void start(Stage stage) {
 		try {
 			FlowPane quiz = new FlowPane();
-			Model model = new Model();
+			model = new Model();
 			ImageView flag = new ImageView(model.getFlagOfCountry());
 	
 			VBox options = new VBox();
+			Text progress = new Text(progressText());
 			Text result = new Text();
 			regions = new ToggleGroup();
 			
@@ -53,12 +55,13 @@ public class Main extends Application {
 					String code = (String)newToggle.getUserData();
 					model.changeQuizCountries(code);
 					flag.setImage(model.getFlagOfCountry());
+					progress.setText(progressText());
 			    }
 			});
 			
 			northAmerica.setSelected(true);
 	
-			options.getChildren().addAll(result, asia, africa, northAmerica, southAmerica, europe, australia);
+			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia);
 			
 			quiz.getChildren().addAll(flag, options);
 			
@@ -69,7 +72,8 @@ public class Main extends Application {
 						Locale locale = countryPath.getLocale();
 						if (locale.getISO3Country().equals(model.getNameOfCountry())) {
 							result.setText("");
-							flag.setImage(model.flagOfNextCountry());	
+							flag.setImage(model.nextCountry());	
+							progress.setText(progressText());
 						}
 						else if (model.moreCountriesInQuiz()){
 							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
@@ -96,6 +100,10 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String progressText() {
+		return String.format("%d / %d", model.completed, model.originalSize);
 	}
 
 	private RadioButton newRegion(String name, String abbreviation) {

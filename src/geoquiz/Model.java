@@ -24,6 +24,8 @@ public class Model {
 
 	List<QuizCountry> quizCountries;
 	int index;
+	int completed;
+	int originalSize;
 	private Long seed;
 	
 	private QuizCountry[] asia;
@@ -63,6 +65,7 @@ public class Model {
 		changeQuizCountries("NA");
 		
 		index = randomCountryIndex(seed);
+		completed = 0;
 	}
 	
 	private int randomCountryIndex(Long seed) {
@@ -90,7 +93,8 @@ public class Model {
 		return quizCountries.size();
 	}
 	
-	public Image flagOfNextCountry() {
+	public Image nextCountry() {
+		completed++;
 		quizCountries.remove(index);			
 		if (!moreCountriesInQuiz()) {
 			return null; 
@@ -104,6 +108,8 @@ public class Model {
 		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));
 		}
+		completed = 0;
+		originalSize = continent.length;
 		quizCountries = new ArrayList<QuizCountry>(Arrays.asList(continent));
 		index = randomCountryIndex(seed);
 	}
