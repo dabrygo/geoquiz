@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import eu.hansolo.fx.world.CountryPath;
@@ -21,13 +23,30 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private World world;
+	private int index;
+    
+    class QuizCountry {
+    	public String name;
+		public Image flag;
+
+		public QuizCountry(String name) {
+    		this.name = name;
+    		this.flag = new Image(name + ".png");
+    	}
+    }
     
     @SuppressWarnings("unchecked")
 	@Override 
     public void start(Stage stage) {
 
         FlowPane quiz = new FlowPane();
-        ImageView flag = new ImageView(new Image("USA.png"));
+        QuizCountry USA = new QuizCountry("USA");
+        QuizCountry CAN = new QuizCountry("CAN");
+        List<QuizCountry> quizCountries = new ArrayList<>();
+        quizCountries.add(USA);
+        quizCountries.add(CAN);
+        index = 0;
+        ImageView flag = new ImageView(quizCountries.get(0).flag);
         Text result = new Text();
     	
         world = WorldBuilder.create()
@@ -35,8 +54,12 @@ public class Main extends Application {
                             .mousePressHandler(evt -> {
                                 CountryPath countryPath = (CountryPath) evt.getSource();
                                 Locale      locale      = countryPath.getLocale();
-                                if (locale.getISO3Country().equals("USA")) {
+                                if (locale.getISO3Country().equals(quizCountries.get(index).name)) {
                                 	result.setText("Correct!");
+                                	if (index < quizCountries.size() - 1) {
+                                		index++;
+                                		flag.setImage(quizCountries.get(index).flag);	
+                                	}
                                 }
                                 else {
                                 	result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
