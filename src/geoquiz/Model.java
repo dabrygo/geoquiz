@@ -100,27 +100,30 @@ public class Model {
 	}
 	
 	public void changeQuizCountries(String region) {
-		if (region.equals("AS")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(asia));
-		}
-		else if (region.equals("AF")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(africa));
-		}
-		else if (region.equals("NA")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(northAmerica));
-		}
-		else if (region.equals("SA")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(southAmerica));
-		}
-		else if (region.equals("EU")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(europe));
-		}
-		else if (region.equals("AU")) {
-			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(australia));
-		}
-		else {
+		QuizCountry[] continent = chooseContinentFromCode(region);
+		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));
 		}
+		quizCountries = new ArrayList<QuizCountry>(Arrays.asList(continent));
 		index = randomCountryIndex(seed);
+	}
+	
+	private QuizCountry[] chooseContinentFromCode(String code) {
+		switch(code) {
+			case "AS":
+				return asia;
+			case "AF":
+				return africa;
+			case "NA":
+				return northAmerica;
+			case "SA":
+				return southAmerica;
+			case "EU":
+				return europe;
+			case "AU":
+				return australia;
+			default:
+				return null;
+		}
 	}
 }
