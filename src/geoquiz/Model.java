@@ -6,9 +6,9 @@ import javafx.scene.image.Image;
 
 public class Model {
 
-	class QuizCountry {
-		public String name;
-		public Image flag;
+	private class QuizCountry {
+		private String name;
+		private Image flag;
 
 		public QuizCountry(String name) {
 			this.name = name;
@@ -16,13 +16,13 @@ public class Model {
 		}
 	}
 
-	public List<QuizCountry> quizCountries;
+	private List<QuizCountry> quizCountries;
 	private int index;
 	
 	public Model() {
 		index = 0;
-		Model.QuizCountry USA = new Model.QuizCountry("USA");
-		Model.QuizCountry CAN = new Model.QuizCountry("CAN");
+		QuizCountry USA = new QuizCountry("USA");
+		QuizCountry CAN = new QuizCountry("CAN");
 		
 		quizCountries = new ArrayList<>();
 		quizCountries.add(USA);
