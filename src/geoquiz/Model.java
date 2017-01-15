@@ -1,5 +1,6 @@
 package geoquiz;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -15,11 +16,17 @@ public class Model {
 			this.name = name;
 			this.flag = new Image(this.getClass().getResourceAsStream("/geoquiz/" + name + ".png"));
 		}
+		
+		public String toString() {
+			return name;
+		}
 	}
 
 	List<QuizCountry> quizCountries;
 	int index;
 	private Long seed;
+	private QuizCountry[] northAmerica;
+	private QuizCountry[] europe;
 	
 	public Model() {
 		this(null);
@@ -30,9 +37,13 @@ public class Model {
 		QuizCountry USA = new QuizCountry("USA");
 		QuizCountry CAN = new QuizCountry("CAN");
 		
-		quizCountries = new ArrayList<>();
-		quizCountries.add(USA);
-		quizCountries.add(CAN);
+		QuizCountry GBR = new QuizCountry("GBR");
+		QuizCountry IRL = new QuizCountry("IRL");
+
+		northAmerica = new QuizCountry[] { USA, CAN };
+		europe = new QuizCountry[] { GBR, IRL };
+		
+		changeQuizCountries("NA");
 		
 		index = randomCountryIndex(seed);
 	}
@@ -63,11 +74,24 @@ public class Model {
 	}
 	
 	public Image flagOfNextCountry() {
-		quizCountries.remove(index);
+		quizCountries.remove(index);			
 		if (!moreCountriesInQuiz()) {
 			return null; 
 		}
 		index = randomCountryIndex(seed);
 		return getFlagOfCountry();
+	}
+	
+	public void changeQuizCountries(String region) {
+		if (region.equals("NA")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(northAmerica));
+		}
+		else if (region.equals("EU")) {
+			quizCountries = new ArrayList<QuizCountry>(Arrays.asList(europe));
+		}
+		else {
+			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));
+		}
+		index = randomCountryIndex(seed);
 	}
 }
