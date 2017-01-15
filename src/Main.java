@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import eu.hansolo.fx.world.CountryPath;
@@ -11,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -23,30 +20,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private World world;
-	private int index;
-
-	class QuizCountry {
-		public String name;
-		public Image flag;
-
-		public QuizCountry(String name) {
-			this.name = name;
-			this.flag = new Image(name + ".png");
-		}
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override 
 	public void start(Stage stage) {
 
 		FlowPane quiz = new FlowPane();
-		QuizCountry USA = new QuizCountry("USA");
-		QuizCountry CAN = new QuizCountry("CAN");
-		List<QuizCountry> quizCountries = new ArrayList<>();
-		quizCountries.add(USA);
-		quizCountries.add(CAN);
-		index = 0;
-		ImageView flag = new ImageView(quizCountries.get(0).flag);
+		Model model = new Model();
+		ImageView flag = new ImageView(model.getFlagOfCountry());
 		Text result = new Text();
 
 		world = WorldBuilder.create()
@@ -54,11 +35,10 @@ public class Main extends Application {
 				.mousePressHandler(evt -> {
 					CountryPath countryPath = (CountryPath) evt.getSource();
 					Locale      locale      = countryPath.getLocale();
-					if (locale.getISO3Country().equals(quizCountries.get(index).name)) {
-						if (index < quizCountries.size() - 1) {
-							index++;
+					if (locale.getISO3Country().equals(model.getNameOfCountry())) {
+						if (model.moreCountriesInQuiz()) {
 							result.setText("");
-							flag.setImage(quizCountries.get(index).flag);	
+							flag.setImage(model.flagOfNextCountry());	
 						}
 						else {
 							flag.setImage(null);
@@ -67,7 +47,6 @@ public class Main extends Application {
 					else {
 						result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
 					}
-					System.out.println(locale.getDisplayCountry() + " (" + locale.getISO3Country() + ")");
 				})
 				.zoomEnabled(true)
 				.selectionEnabled(true)
