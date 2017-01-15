@@ -9,40 +9,53 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
     private World world;
-
+    
     @SuppressWarnings("unchecked")
-	@Override public void init() {
+	@Override 
+    public void start(Stage stage) {
+
+        FlowPane quiz = new FlowPane();
+        ImageView flag = new ImageView(new Image("USA.png"));
+        Text result = new Text();
+    	
         world = WorldBuilder.create()
                             .resolution(Resolution.HI_RES)
                             .mousePressHandler(evt -> {
                                 CountryPath countryPath = (CountryPath) evt.getSource();
                                 Locale      locale      = countryPath.getLocale();
+                                if (locale.getISO3Country().equals("USA")) {
+                                	result.setText("Correct!");
+                                }
+                                else {
+                                	result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
+                                }
                                 System.out.println(locale.getDisplayCountry() + " (" + locale.getISO3Country() + ")");
                             })
                             .zoomEnabled(true)
                             .selectionEnabled(true)
                             .build();
-    }
-    
-    @Override 
-    public void start(Stage stage) {
+    	
     	SplitPane splitPane = new SplitPane();
     	splitPane.setOrientation(Orientation.VERTICAL);
     	
         StackPane map = new StackPane(world);
         map.setBackground(new Background(new BackgroundFill(world.getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        splitPane.getItems().add(map);
-        splitPane.getItems().add(new TextArea("hello there"));
+
+        quiz.getChildren().addAll(flag, result);
+        splitPane.getItems().addAll(map, quiz);
         
         Scene scene = new Scene(splitPane);
 
