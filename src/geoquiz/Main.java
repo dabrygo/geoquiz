@@ -36,15 +36,10 @@ public class Main extends Application {
 					CountryPath countryPath = (CountryPath) evt.getSource();
 					Locale      locale      = countryPath.getLocale();
 					if (locale.getISO3Country().equals(model.getNameOfCountry())) {
-						if (model.moreCountriesInQuiz()) {
-							result.setText("");
-							flag.setImage(model.flagOfNextCountry());	
-						}
-						else {
-							flag.setImage(null);
-						}
+						result.setText("");
+						flag.setImage(model.flagOfNextCountry());	
 					}
-					else {
+					else if (model.moreCountriesInQuiz()){
 						result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
 					}
 				})

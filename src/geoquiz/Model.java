@@ -6,17 +6,17 @@ import javafx.scene.image.Image;
 
 public class Model {
 
-	private class QuizCountry {
+	class QuizCountry {
 		private String name;
 		private Image flag;
 
 		public QuizCountry(String name) {
 			this.name = name;
-			this.flag = new Image("geoquiz/" + name + ".png");
+			this.flag = new Image(this.getClass().getResourceAsStream("/geoquiz/" + name + ".png"));
 		}
 	}
 
-	private List<QuizCountry> quizCountries;
+	List<QuizCountry> quizCountries;
 	private int index;
 	
 	public Model() {
@@ -42,7 +42,10 @@ public class Model {
 	}
 	
 	public Image flagOfNextCountry() {
-		index++;
-		return getFlagOfCountry();
+		if (moreCountriesInQuiz()) {
+			index++;
+			return getFlagOfCountry();
+		} 
+		return null; 
 	}
 }
