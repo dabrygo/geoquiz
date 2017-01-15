@@ -1,5 +1,6 @@
 package geoquiz;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +14,11 @@ public class TestModel {
 
 	@Before
 	public void setUp() {
-		model = new Model();
+		model = new Model(new Long(1));
+	}
+	
+	private void completeAllQuestions() {
+		model.quizCountries.clear();
 	}
 
 	@Test
@@ -23,14 +28,27 @@ public class TestModel {
 
 	@Test
 	public void test_empty_quiz_when_all_questions_completed() {
-		model.index = model.lastCountry();
+		completeAllQuestions();
 		assertFalse(model.moreCountriesInQuiz());
 	}
 	
 	@Test
 	public void test_null_flag_when_all_questions_completed() {
-		model.index = model.lastCountry();
+		completeAllQuestions();
 		assertNull(model.flagOfNextCountry());
+	}
+	
+	@Test
+	public void test_one_less_country_when_move_to_next_question() {
+		int originalSize = model.countriesLeft();
+		model.flagOfNextCountry();
+		assertTrue(model.countriesLeft() < originalSize);
+	}
+	
+	@Test
+	public void test_name_of_country_when_all_questions_completed() {
+		completeAllQuestions();
+		assertEquals("", model.getNameOfCountry());
 	}
 
 }

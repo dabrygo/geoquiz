@@ -1,6 +1,7 @@
 package geoquiz;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.scene.image.Image;
 
@@ -18,38 +19,55 @@ public class Model {
 
 	List<QuizCountry> quizCountries;
 	int index;
+	private Long seed;
 	
 	public Model() {
-		index = 0;
+		this(null);
+	}
+
+	Model(Long seed) {
+		this.seed = seed;
 		QuizCountry USA = new QuizCountry("USA");
 		QuizCountry CAN = new QuizCountry("CAN");
 		
 		quizCountries = new ArrayList<>();
 		quizCountries.add(USA);
 		quizCountries.add(CAN);
+		
+		index = randomCountryIndex(seed);
 	}
 	
+	private int randomCountryIndex(Long seed) {
+		Random random = (seed == null)
+				      ? new Random() 
+				      : new Random(seed);
+		return random.nextInt(quizCountries.size());
+	}
+
 	public Image getFlagOfCountry() {
 		return quizCountries.get(index).flag;
 	}
 	
 	public String getNameOfCountry() {
-		return quizCountries.get(index).name;
+		return moreCountriesInQuiz() 
+			   ? quizCountries.get(index).name
+			   : "";
 	}
 	
 	public boolean moreCountriesInQuiz() {
-		return index < lastCountry();
+		return countriesLeft() >= 1;
 	}
-
-	int lastCountry() {
-		return quizCountries.size() - 1;
+	
+	int countriesLeft() {
+		return quizCountries.size();
 	}
 	
 	public Image flagOfNextCountry() {
-		if (moreCountriesInQuiz()) {
-			index++;
-			return getFlagOfCountry();
-		} 
-		return null; 
+		quizCountries.remove(index);
+		if (!moreCountriesInQuiz()) {
+			return null; 
+		}
+		index = randomCountryIndex(seed);
+		return getFlagOfCountry();
 	}
 }
