@@ -1,3 +1,4 @@
+package geoquiz;
 import java.util.Locale;
 
 import eu.hansolo.fx.world.CountryPath;
