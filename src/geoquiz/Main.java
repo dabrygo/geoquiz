@@ -40,7 +40,7 @@ public class Main extends Application {
 			
 			FlowPane clues = new FlowPane(	);
 			clues.setOrientation(Orientation.HORIZONTAL);
-			Text countryName = new Text(model.getNameOfCountry());
+			Text countryName = new Text(getCountryDescription());
 			countryName.setFont(new Font(24.0));
 			ImageView flag = new ImageView(model.getFlagOfCountry());
 			clues.getChildren().addAll(countryName, flag);
@@ -61,7 +61,7 @@ public class Main extends Application {
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 					String code = (String)newToggle.getUserData();
 					model.changeQuizCountries(code);
-					countryName.setText(model.getNameOfCountry());
+					countryName.setText(getCountryDescription());
 					flag.setImage(model.getFlagOfCountry());
 					progress.setText(progressText());
 			    }
@@ -82,7 +82,7 @@ public class Main extends Application {
 							result.setText("");
 							flag.setImage(model.nextCountry());	
 							progress.setText(progressText());
-							countryName.setText(model.getNameOfCountry());
+							countryName.setText(getCountryDescription());
 						}
 						else if (model.moreCountriesInQuiz()){
 							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
@@ -109,6 +109,10 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String getCountryDescription() {
+		return model.getNameOfCountry() + ", Capital: " + model.getCapital();
 	}
 
 	private String progressText() {

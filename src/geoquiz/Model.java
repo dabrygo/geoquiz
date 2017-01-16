@@ -1,8 +1,15 @@
 package geoquiz;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import eu.hansolo.fx.world.Country;
@@ -15,12 +22,16 @@ public class Model {
 		private String iso3name;
 		private Image flag;
 		private String name;
+		private String capital;
 
 		public QuizCountry(Country country) {
 			CountryPath countryPath = new CountryPath(country.name());
 			this.iso3name = countryPath.getLocale().getISO3Country();
 			this.flag = new Image(this.getClass().getResourceAsStream("/geoquiz/" + iso3name + ".png"));
 			this.name = new CountryPath(country.name()).getLocale().getDisplayCountry();
+			this.capital = capitals.get(name) != null 
+					     ? capitals.get(name)[1]
+					     : "";
 		}
 
 		public String toString() {
@@ -40,6 +51,7 @@ public class Model {
 	private QuizCountry[] southAmerica;
 	private QuizCountry[] europe;
 	private QuizCountry[] australia;
+	private Map<String, String[]> capitals;
 
 	public Model() {
 		this(null);
@@ -48,6 +60,24 @@ public class Model {
 	Model(Long seed) {
 		this.seed = seed;
 
+		capitals = new HashMap<>();
+		try {
+			String line;
+			BufferedReader reader = new BufferedReader(new FileReader(Paths.get("rsc", "geoquiz", "capitals.txt").toFile()));
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				final String[] otherData = data; //Arrays.stream(data).skip(1).toArray(n -> new String[n]);
+				capitals.put(data[0], otherData);
+			}
+			reader.close();
+		} 
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		QuizCountry russia = new QuizCountry(Country.RU);
 		asia = new QuizCountry[] { russia };
 
@@ -132,5 +162,9 @@ public class Model {
 
 	public String getNameOfCountry() {
 		return index < quizCountries.size() ? quizCountries.get(index).name : "";
+	}
+	
+	public String getCapital() {
+		return quizCountries.get(index).capital;
 	}
 }
