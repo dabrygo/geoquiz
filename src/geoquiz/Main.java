@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Toggle;
@@ -20,6 +21,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -30,6 +32,10 @@ public class Main extends Application {
 	private World world;
 	private ToggleGroup regions;
 	private Model model;
+	private Text countryName;
+	private ImageView flag;
+	private Text progress;
+	private Text result;
 
 	@SuppressWarnings("unchecked")
 	@Override 
@@ -40,14 +46,14 @@ public class Main extends Application {
 			
 			FlowPane clues = new FlowPane(	);
 			clues.setOrientation(Orientation.HORIZONTAL);
-			Text countryName = new Text(getCountryDescription());
+			countryName = new Text(getCountryDescription());
 			countryName.setFont(new Font(24.0));
-			ImageView flag = new ImageView(model.getFlagOfCountry());
+			flag = new ImageView(model.getFlagOfCountry());
 			clues.getChildren().addAll(countryName, flag);
 			
 			VBox options = new VBox();
-			Text progress = new Text(progressText());
-			Text result = new Text();
+			progress = new Text(progressText());
+			result = new Text();
 			regions = new ToggleGroup();
 			
 			RadioButton asia = newRegion("Asia", "AS");
@@ -70,7 +76,14 @@ public class Main extends Application {
 			
 			northAmerica.setSelected(true);
 	
-			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld);
+			Button back = new Button("Back");
+			Button forward = new Button("Forward");
+			forward.setOnAction(e -> {
+				goToNextCountry();
+			});
+			HBox navigator = new HBox(back, forward);
+			
+			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld, navigator);
 			
 			quiz.getChildren().addAll(clues, options);
 			
@@ -80,10 +93,7 @@ public class Main extends Application {
 						CountryPath countryPath = (CountryPath) evt.getSource();
 						Locale locale = countryPath.getLocale();
 						if (locale.getISO3Country().equals(model.getIsoOfCountry())) {
-							result.setText("");
-							flag.setImage(model.nextCountry());	
-							progress.setText(progressText());
-							countryName.setText(getCountryDescription());
+							goToNextCountry();
 						}
 						else if (model.moreCountriesInQuiz()){
 							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
@@ -110,6 +120,13 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void goToNextCountry() {
+		result.setText("");
+		flag.setImage(model.nextCountry());	
+		progress.setText(progressText());
+		countryName.setText(getCountryDescription());
 	}
 
 	private String getCountryDescription() {

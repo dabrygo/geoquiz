@@ -73,7 +73,7 @@ public class Model {
 			BufferedReader reader = new BufferedReader(new FileReader(Paths.get("rsc", "geoquiz", "capitals.txt").toFile()));
 			while ((line = reader.readLine()) != null) {
 				String[] data = line.split(",");
-				final String[] otherData = data; //Arrays.stream(data).skip(1).toArray(n -> new String[n]);
+				final String[] otherData = data;
 				capitals.put(data[0], otherData);
 			}
 			reader.close();
