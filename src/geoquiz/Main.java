@@ -56,6 +56,7 @@ public class Main extends Application {
 			RadioButton southAmerica = newRegion("South America", "SA");
 			RadioButton europe = newRegion("Europe", "EU");
 			RadioButton australia = newRegion("Australia", "AU");
+			RadioButton wholeWorld = newRegion("World", "WORLD");
 			
 			regions.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
@@ -69,7 +70,7 @@ public class Main extends Application {
 			
 			northAmerica.setSelected(true);
 	
-			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia);
+			options.getChildren().addAll(progress, result, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld);
 			
 			quiz.getChildren().addAll(clues, options);
 			

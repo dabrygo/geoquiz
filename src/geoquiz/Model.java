@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Random;
 
 import eu.hansolo.fx.world.Country;
 import eu.hansolo.fx.world.CountryPath;
 import javafx.scene.image.Image;
+import png250px.Png250px;
 
 public class Model {
 
@@ -26,9 +29,11 @@ public class Model {
 
 		public QuizCountry(Country country) {
 			CountryPath countryPath = new CountryPath(country.name());
-			this.iso3name = countryPath.getLocale().getISO3Country();
-			this.flag = new Image(this.getClass().getResourceAsStream("/geoquiz/" + iso3name + ".png"));
-			this.name = new CountryPath(country.name()).getLocale().getDisplayCountry();
+			Locale locale = countryPath.getLocale();
+			this.iso3name = locale.getISO3Country();
+			System.out.println(locale.getDisplayCountry());
+			this.flag = new Image(Png250px.class.getResourceAsStream("/png250px/" + country.name().toLowerCase() + ".png"));
+			this.name = locale.getDisplayCountry();
 			this.capital = capitals.get(name) != null 
 					     ? capitals.get(name)[1]
 					     : "";
@@ -51,6 +56,8 @@ public class Model {
 	private QuizCountry[] southAmerica;
 	private QuizCountry[] europe;
 	private QuizCountry[] australia;
+	private QuizCountry[] world;
+	
 	private Map<String, String[]> capitals;
 
 	public Model() {
@@ -98,7 +105,19 @@ public class Model {
 		QuizCountry AUS = new QuizCountry(Country.AU);
 		australia = new QuizCountry[] { AUS };
 
-		changeQuizCountries("NA");
+			world = new QuizCountry[Country.values().length];
+			int i = 0;
+	        for (Country country : Country.values()) {
+	        	try {
+		        	QuizCountry quizCountry = new QuizCountry(country);
+		        	world[i++] = quizCountry;
+	        	}
+	        	catch (NullPointerException | MissingResourceException e) { 
+	        		System.err.println("Could not register " + country.getName());
+	        	}
+	        }
+		
+		changeQuizCountries("WORLD");
 
 		index = randomCountryIndex(seed);
 		completed = 0;
@@ -156,7 +175,7 @@ public class Model {
 			case "SA": return southAmerica;
 			case "EU": return europe;
 			case "AU": return australia;
-			default: return null;
+			default: return world;
 		}
 	}
 
