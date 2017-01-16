@@ -15,7 +15,6 @@ import java.util.MissingResourceException;
 import java.util.Random;
 
 import eu.hansolo.fx.world.Country;
-import eu.hansolo.fx.world.CountryPath;
 import javafx.scene.image.Image;
 import png250px.Png250px;
 
@@ -28,10 +27,9 @@ public class Model {
 		private String capital;
 
 		public QuizCountry(Country country) {
-			CountryPath countryPath = new CountryPath(country.name());
-			Locale locale = countryPath.getLocale();
-			this.iso3name = locale.getISO3Country();
+			Locale locale = new Locale("", country.name());
 			System.out.println(locale.getDisplayCountry());
+			this.iso3name = locale.getISO3Country();
 			this.flag = new Image(Png250px.class.getResourceAsStream("/png250px/" + country.name().toLowerCase() + ".png"));
 			this.name = locale.getDisplayCountry();
 			this.capital = capitals.get(name) != null 
