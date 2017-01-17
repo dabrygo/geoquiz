@@ -135,7 +135,8 @@ public class Model {
 			case "SA": return southAmerica;
 			case "EU": return europe;
 			case "AU": return australia;
-			default: return world;
+			case "WORLD": return world;
+			default: return null;
 		}
 	}
 
