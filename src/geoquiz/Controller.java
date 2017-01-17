@@ -89,18 +89,16 @@ public class Controller extends Application {
 	}
 
 	private void goToNextCountry() {
-//		result.setText("");
 		clues.updateCountry(model.nextCountry());
 		updateProgressText();
 		
-		guessed.setFlag(null);
-		guessed.setName("");
-		guessed.setCapital("");
+		guessed.updateCountry(new NullCountry());;
 	}
 
 	private void updateProgressText() {
 		view.progress.setText(String.format("%d / %d", model.completed, model.originalSize));
 	}
+	
 	@Override 
 	public void stop() {
 		System.exit(0);

@@ -96,3 +96,26 @@ class PictorialQuizCountry extends QuizCountry {
 		return flag;
 	}
 }
+
+class NullCountry implements IQuizCountry {
+
+	@Override
+	public Image getFlag() {
+		return null;
+	}
+
+	@Override
+	public String getCapital() {
+		return "";
+	}
+
+	@Override
+	public String getName() {
+		return "";
+	}
+
+	@Override
+	public String getAbbreviation() {
+		return "";
+	}
+}

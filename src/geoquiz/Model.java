@@ -97,6 +97,9 @@ public class Model {
 	}
 
 	public IQuizCountry currentCountry() {
+		if (quizCountries == null || index > quizCountries.size()) {
+			return new NullCountry();
+		}
 		return quizCountries.get(index);
 	}
 

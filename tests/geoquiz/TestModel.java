@@ -52,6 +52,7 @@ public class TestModel {
 	@Test
 	public void test_name_of_country_when_all_questions_completed() {
 		completeAllQuestions();
+		System.out.println(model.currentCountry());
 		assertEquals("", model.currentCountry().getName());
 	}
 	
