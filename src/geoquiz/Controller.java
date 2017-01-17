@@ -49,6 +49,9 @@ public class Controller extends Application {
 			getChildren().addAll(nameText, capitalText, flagImage);
 		}
 		
+		public CountryDisplay(IQuizCountry country) {
+			this(country.getName(), country.getCapital(), country.getFlag());
+		}
 		public void setName(String name) {
 			nameText.setText("Name: " + name);
 		}
@@ -60,6 +63,12 @@ public class Controller extends Application {
 		public void setFlag(Image flag) {
 			flagImage.setImage(flag);
 		}
+
+		public void updateCountry(IQuizCountry theNextCountry) {
+			setName(theNextCountry.getName());
+			setCapital(theNextCountry.getCapital());
+			setFlag(theNextCountry.getFlag());
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -69,9 +78,7 @@ public class Controller extends Application {
 			model = new Model();
 			view = new View();
 			
-			clues = new CountryDisplay(model.getNameOfCountry(), 
-									   model.getCapital(),
-									   model.getFlagOfCountry());
+			clues = new CountryDisplay(model.currentCountry());
 			
 			guessed = new CountryDisplay("", "", null);
 
@@ -79,8 +86,7 @@ public class Controller extends Application {
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 					String code = (String)newToggle.getUserData();
 					model.changeQuizCountries(code);
-					clues.setName(model.getNameOfCountry());
-					clues.setFlag(model.getFlagOfCountry());
+					clues.updateCountry(model.currentCountry());;
 					updateProgressText();
 			    }
 			});
@@ -97,7 +103,8 @@ public class Controller extends Application {
 					.mousePressHandler(evt -> {
 						CountryPath countryPath = (CountryPath) evt.getSource();
 						Locale locale = countryPath.getLocale();
-						if (locale.getISO3Country().equals(model.getIsoOfCountry())) {
+						String selectedIso = model.currentCountry().getAbbreviation();
+						if (locale.getISO3Country().equals(selectedIso)) {
 							goToNextCountry();
 						}
 						else if (model.moreCountriesInQuiz()){
@@ -132,10 +139,12 @@ public class Controller extends Application {
 
 	private void goToNextCountry() {
 //		result.setText("");
-		clues.setFlag(model.nextCountry());	
+		clues.updateCountry(model.nextCountry());
 		updateProgressText();
-		clues.setName(model.getNameOfCountry());
-		clues.setCapital(model.getCapital());
+		
+		guessed.setFlag(null);
+		guessed.setName("");
+		guessed.setCapital("");
 	}
 
 	private void updateProgressText() {

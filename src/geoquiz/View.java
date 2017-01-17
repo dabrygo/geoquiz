@@ -44,7 +44,6 @@ public class View extends SplitPane {
 
 		northAmerica.setSelected(true);
 		
-		
 		Button back = new Button("Back");
 		forward = new Button("Forward");
 

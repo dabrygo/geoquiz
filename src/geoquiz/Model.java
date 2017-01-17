@@ -7,7 +7,6 @@ import java.util.MissingResourceException;
 import java.util.Random;
 
 import eu.hansolo.fx.world.Country;
-import javafx.scene.image.Image;
 
 public class Model {
 
@@ -24,10 +23,10 @@ public class Model {
 	private IQuizCountry[] europe;
 	private IQuizCountry[] australia;
 	private IQuizCountry[] world;
-	
+
 	IQuizCountry[] masterList;
 	private Random random;
-	
+
 	public Model() {
 		this(null);
 	}
@@ -35,7 +34,7 @@ public class Model {
 	Model(Long seed) {
 		this.seed = seed;
 		random = (seed == null) ? new Random() : new Random(seed);
-		
+
 		IQuizCountry russia = assignQuizCountry(Country.RU);
 		asia = new IQuizCountry[] { russia };
 
@@ -58,29 +57,27 @@ public class Model {
 
 		world = new IQuizCountry[Country.values().length];
 		int i = 0;
-        for (Country country : Country.values()) {
-        	try {
-	        	IQuizCountry quizCountry = assignQuizCountry(country);
-	        	world[i++] = quizCountry;
-        	}
-        	catch (NullPointerException | MissingResourceException e) { 
-        		System.err.println("Could not register " + country.getName());
-        	}
-        }
-        
+		for (Country country : Country.values()) {
+			try {
+				IQuizCountry quizCountry = assignQuizCountry(country);
+				world[i++] = quizCountry;
+			} catch (NullPointerException | MissingResourceException e) {
+				System.err.println("Could not register " + country.getName());
+			}
+		}
+
 		masterList = new IQuizCountry[Country.values().length];
 		i = 0;
-        for (Country country : Country.values()) {
-        	try {
-	        	IQuizCountry quizCountry = assignQuizCountry(country);
-	        	masterList[i++] = quizCountry;
-        	}
-        	catch (NullPointerException | MissingResourceException e) {
-        		i++;
-        		System.err.println("Could not register " + country.getName());
-        	}
-        }
-		
+		for (Country country : Country.values()) {
+			try {
+				IQuizCountry quizCountry = assignQuizCountry(country);
+				masterList[i++] = quizCountry;
+			} catch (NullPointerException | MissingResourceException e) {
+				i++;
+				System.err.println("Could not register " + country.getName());
+			}
+		}
+
 		changeQuizCountries("WORLD");
 
 		index = randomCountryIndex(seed);
@@ -99,15 +96,7 @@ public class Model {
 		return random.nextInt(quizCountries.size());
 	}
 
-	public Image getFlagOfCountry() {
-		return thisCountry().getFlag();
-	}
-
-	public String getIsoOfCountry() {
-		return moreCountriesInQuiz() ? thisCountry().getAbbreviation() : "";
-	}
-
-	private IQuizCountry thisCountry() {
+	public IQuizCountry currentCountry() {
 		return quizCountries.get(index);
 	}
 
@@ -119,7 +108,7 @@ public class Model {
 		return quizCountries.size();
 	}
 
-	public Image nextCountry() {
+	public IQuizCountry nextCountry() {
 		completed++;
 		if (index < quizCountries.size()) {
 			quizCountries.remove(index);
@@ -128,7 +117,7 @@ public class Model {
 			return null;
 		}
 		index = randomCountryIndex(seed);
-		return getFlagOfCountry();
+		return currentCountry();
 	}
 
 	public void changeQuizCountries(String region) {
@@ -144,22 +133,22 @@ public class Model {
 
 	private IQuizCountry[] chooseContinentFromCode(String code) {
 		switch (code) {
-			case "AS": return asia;
-			case "AF": return africa;
-			case "NA": return northAmerica;
-			case "SA": return southAmerica;
-			case "EU": return europe;
-			case "AU": return australia;
-			case "WORLD": return world;
-			default: return null;
+		case "AS":
+			return asia;
+		case "AF":
+			return africa;
+		case "NA":
+			return northAmerica;
+		case "SA":
+			return southAmerica;
+		case "EU":
+			return europe;
+		case "AU":
+			return australia;
+		case "WORLD":
+			return world;
+		default:
+			return null;
 		}
-	}
-
-	public String getNameOfCountry() {
-		return index < quizCountries.size() ? thisCountry().getName() : "";
-	}
-	
-	public String getCapital() {
-		return thisCountry().getCapital();
 	}
 }

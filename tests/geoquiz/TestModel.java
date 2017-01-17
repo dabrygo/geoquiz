@@ -52,7 +52,7 @@ public class TestModel {
 	@Test
 	public void test_name_of_country_when_all_questions_completed() {
 		completeAllQuestions();
-		assertEquals("", model.getIsoOfCountry());
+		assertEquals("", model.currentCountry().getName());
 	}
 	
 	@Test
@@ -76,11 +76,11 @@ public class TestModel {
 	
 	@Test
 	public void test_know_full_name_of_country() {
-		assertEquals("Vietnam", model.getNameOfCountry());
+		assertEquals("Vietnam", model.currentCountry().getName());
 	}
 	
 	@Test
 	public void test_know_iso_code_of_country() {
-		assertEquals("VNM", model.getIsoOfCountry());
+		assertEquals("VNM", model.currentCountry().getAbbreviation());
 	}
 }
