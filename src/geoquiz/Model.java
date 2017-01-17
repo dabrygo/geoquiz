@@ -1,86 +1,15 @@
 package geoquiz;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Random;
 
 import eu.hansolo.fx.world.Country;
 import javafx.scene.image.Image;
-import png250px.Png250px;
 
 public class Model {
-
-	interface IQuizCountry {
-		Image getFlag();
-		String getCapital();
-		String getName();
-		String getAbbreviation();
-	}
-	
-	class QuizCountry implements IQuizCountry {
-		protected String iso3name;
-		protected String name;
-		protected String capital;
-
-		public QuizCountry(Country country) {
-			Locale locale = new Locale("", country.name());
-			iso3name = locale.getISO3Country();
-			name = locale.getDisplayCountry();
-			capital = capitals.get(name) != null 
-					? capitals.get(name)[1]
-					: "";
-		}
-		
-		@Override
-		public Image getFlag() {
-			return null;
-		}
-
-		@Override
-		public String getCapital() {
-			return capital;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String getAbbreviation() {
-			return iso3name;
-		}
-
-		public String toString() {
-			return iso3name;
-		}
-	}
-	
-	class PictorialQuizCountry extends QuizCountry {
-		private Image flag;
-
-		public PictorialQuizCountry(Country country) {
-			super(country);
-			String countryAbbreviation = country.name().toLowerCase();
-			String imageName = "/png250px/" + countryAbbreviation + ".png";
-			flag = new Image(Png250px.class.getResourceAsStream(imageName));
-		}
-
-		@Override
-		public Image getFlag() {
-			return flag;
-		}
-	}
 
 	List<IQuizCountry> quizCountries;
 	int index;
@@ -95,33 +24,15 @@ public class Model {
 	private IQuizCountry[] europe;
 	private IQuizCountry[] australia;
 	private IQuizCountry[] world;
+	private Random random;
 	
-	private Map<String, String[]> capitals;
-
 	public Model() {
 		this(null);
 	}
 
 	Model(Long seed) {
 		this.seed = seed;
-
-		capitals = new HashMap<>();
-		try {
-			String line;
-			BufferedReader reader = new BufferedReader(new FileReader(Paths.get("rsc", "geoquiz", "capitals.txt").toFile()));
-			while ((line = reader.readLine()) != null) {
-				String[] data = line.split(",");
-				final String[] otherData = data;
-				capitals.put(data[0], otherData);
-			}
-			reader.close();
-		} 
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		random = (seed == null) ? new Random() : new Random(seed);
 		
 		IQuizCountry russia = assignQuizCountry(Country.RU);
 		asia = new IQuizCountry[] { russia };
@@ -170,7 +81,6 @@ public class Model {
 	}
 
 	private int randomCountryIndex(Long seed) {
-		Random random = (seed == null) ? new Random() : new Random(seed);
 		return random.nextInt(quizCountries.size());
 	}
 
