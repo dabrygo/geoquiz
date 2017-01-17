@@ -20,41 +20,81 @@ import png250px.Png250px;
 
 public class Model {
 
-	class QuizCountry {
-		private String iso3name;
-		private Image flag;
-		private String name;
-		private String capital;
+	interface IQuizCountry {
+		Image getFlag();
+		String getCapital();
+		String getName();
+		String getAbbreviation();
+	}
+	
+	class QuizCountry implements IQuizCountry {
+		protected String iso3name;
+		protected String name;
+		protected String capital;
 
 		public QuizCountry(Country country) {
 			Locale locale = new Locale("", country.name());
-			System.out.println(locale.getDisplayCountry());
-			this.iso3name = locale.getISO3Country();
-			this.flag = new Image(Png250px.class.getResourceAsStream("/png250px/" + country.name().toLowerCase() + ".png"));
-			this.name = locale.getDisplayCountry();
-			this.capital = capitals.get(name) != null 
-					     ? capitals.get(name)[1]
-					     : "";
+			iso3name = locale.getISO3Country();
+			name = locale.getDisplayCountry();
+			capital = capitals.get(name) != null 
+					? capitals.get(name)[1]
+					: "";
+		}
+		
+		@Override
+		public Image getFlag() {
+			return null;
+		}
+
+		@Override
+		public String getCapital() {
+			return capital;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getAbbreviation() {
+			return iso3name;
 		}
 
 		public String toString() {
 			return iso3name;
 		}
 	}
+	
+	class PictorialQuizCountry extends QuizCountry {
+		private Image flag;
 
-	List<QuizCountry> quizCountries;
+		public PictorialQuizCountry(Country country) {
+			super(country);
+			String countryAbbreviation = country.name().toLowerCase();
+			String imageName = "/png250px/" + countryAbbreviation + ".png";
+			flag = new Image(Png250px.class.getResourceAsStream(imageName));
+		}
+
+		@Override
+		public Image getFlag() {
+			return flag;
+		}
+	}
+
+	List<IQuizCountry> quizCountries;
 	int index;
 	int completed;
 	int originalSize;
 	private Long seed;
 
-	private QuizCountry[] asia;
-	private QuizCountry[] africa;
-	private QuizCountry[] northAmerica;
-	private QuizCountry[] southAmerica;
-	private QuizCountry[] europe;
-	private QuizCountry[] australia;
-	private QuizCountry[] world;
+	private IQuizCountry[] asia;
+	private IQuizCountry[] africa;
+	private IQuizCountry[] northAmerica;
+	private IQuizCountry[] southAmerica;
+	private IQuizCountry[] europe;
+	private IQuizCountry[] australia;
+	private IQuizCountry[] world;
 	
 	private Map<String, String[]> capitals;
 
@@ -83,42 +123,50 @@ public class Model {
 			e.printStackTrace();
 		}
 		
-		QuizCountry russia = new QuizCountry(Country.RU);
-		asia = new QuizCountry[] { russia };
+		IQuizCountry russia = assignQuizCountry(Country.RU);
+		asia = new IQuizCountry[] { russia };
 
-		QuizCountry algiers = new QuizCountry(Country.DZ);
-		africa = new QuizCountry[] { algiers };
+		IQuizCountry algiers = assignQuizCountry(Country.DZ);
+		africa = new IQuizCountry[] { algiers };
 
-		QuizCountry USA = new QuizCountry(Country.US);
-		QuizCountry canada = new QuizCountry(Country.CA);
-		northAmerica = new QuizCountry[] { USA, canada };
+		IQuizCountry USA = assignQuizCountry(Country.US);
+		IQuizCountry canada = assignQuizCountry(Country.CA);
+		northAmerica = new IQuizCountry[] { USA, canada };
 
-		QuizCountry brazil = new QuizCountry(Country.BR);
-		southAmerica = new QuizCountry[] { brazil };
+		IQuizCountry brazil = assignQuizCountry(Country.BR);
+		southAmerica = new IQuizCountry[] { brazil };
 
-		QuizCountry unitedKingdom = new QuizCountry(Country.GB);
-		QuizCountry ireland = new QuizCountry(Country.IE);
-		europe = new QuizCountry[] { unitedKingdom, ireland };
+		IQuizCountry unitedKingdom = assignQuizCountry(Country.GB);
+		IQuizCountry ireland = assignQuizCountry(Country.IE);
+		europe = new IQuizCountry[] { unitedKingdom, ireland };
 
-		QuizCountry AUS = new QuizCountry(Country.AU);
-		australia = new QuizCountry[] { AUS };
+		IQuizCountry AUS = assignQuizCountry(Country.AU);
+		australia = new IQuizCountry[] { AUS };
 
-			world = new QuizCountry[Country.values().length];
-			int i = 0;
-	        for (Country country : Country.values()) {
-	        	try {
-		        	QuizCountry quizCountry = new QuizCountry(country);
-		        	world[i++] = quizCountry;
-	        	}
-	        	catch (NullPointerException | MissingResourceException e) { 
-	        		System.err.println("Could not register " + country.getName());
-	        	}
-	        }
+		world = new IQuizCountry[Country.values().length];
+		int i = 0;
+        for (Country country : Country.values()) {
+        	try {
+	        	IQuizCountry quizCountry = assignQuizCountry(country);
+	        	world[i++] = quizCountry;
+        	}
+        	catch (NullPointerException | MissingResourceException e) { 
+        		System.err.println("Could not register " + country.getName());
+        	}
+        }
 		
 		changeQuizCountries("WORLD");
 
 		index = randomCountryIndex(seed);
 		completed = 0;
+	}
+
+	private IQuizCountry assignQuizCountry(Country country) {
+		return notTesting() ? new PictorialQuizCountry(country) : new QuizCountry(country);
+	}
+
+	private boolean notTesting() {
+		return this.seed == null;
 	}
 
 	private int randomCountryIndex(Long seed) {
@@ -127,11 +175,15 @@ public class Model {
 	}
 
 	public Image getFlagOfCountry() {
-		return quizCountries.get(index).flag;
+		return thisCountry().getFlag();
 	}
 
 	public String getIsoOfCountry() {
-		return moreCountriesInQuiz() ? quizCountries.get(index).iso3name : "";
+		return moreCountriesInQuiz() ? thisCountry().getAbbreviation() : "";
+	}
+
+	private IQuizCountry thisCountry() {
+		return quizCountries.get(index);
 	}
 
 	public boolean moreCountriesInQuiz() {
@@ -155,17 +207,17 @@ public class Model {
 	}
 
 	public void changeQuizCountries(String region) {
-		QuizCountry[] continent = chooseContinentFromCode(region);
+		IQuizCountry[] continent = chooseContinentFromCode(region);
 		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));
 		}
 		completed = 0;
 		originalSize = continent.length;
-		quizCountries = new ArrayList<QuizCountry>(Arrays.asList(continent));
+		quizCountries = new ArrayList<IQuizCountry>(Arrays.asList(continent));
 		index = randomCountryIndex(seed);
 	}
 
-	private QuizCountry[] chooseContinentFromCode(String code) {
+	private IQuizCountry[] chooseContinentFromCode(String code) {
 		switch (code) {
 			case "AS": return asia;
 			case "AF": return africa;
@@ -178,10 +230,10 @@ public class Model {
 	}
 
 	public String getNameOfCountry() {
-		return index < quizCountries.size() ? quizCountries.get(index).name : "";
+		return index < quizCountries.size() ? thisCountry().getName() : "";
 	}
 	
 	public String getCapital() {
-		return quizCountries.get(index).capital;
+		return thisCountry().getCapital();
 	}
 }
