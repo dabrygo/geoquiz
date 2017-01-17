@@ -73,4 +73,14 @@ public class TestModel {
 		thrown.expect(IllegalArgumentException.class);
 		model.changeQuizCountries("XXX");
 	}
+	
+	@Test
+	public void test_know_full_name_of_country() {
+		assertEquals("Vietnam", model.getNameOfCountry());
+	}
+	
+	@Test
+	public void test_know_iso_code_of_country() {
+		assertEquals("VNM", model.getIsoOfCountry());
+	}
 }
