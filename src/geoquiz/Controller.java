@@ -10,18 +10,12 @@ import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Toggle;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Controller extends Application {
@@ -30,46 +24,6 @@ public class Controller extends Application {
 	private View view;
 	private CountryDisplay clues;
 	private CountryDisplay guessed;
-
-	class CountryDisplay extends FlowPane {
-		private Text nameText;
-		private Text capitalText;
-		private ImageView flagImage;
-		
-		public CountryDisplay(String name, String capital, Image flag) {
-			setOrientation(Orientation.VERTICAL);
-			nameText = new Text("Name: " + name);
-			nameText.setFont(new Font(24.0));
-			
-			capitalText = new Text("Capital: " + capital);
-			capitalText.setFont(new Font(24.0));
-			
-			flagImage = new ImageView(flag);
-			
-			getChildren().addAll(nameText, capitalText, flagImage);
-		}
-		
-		public CountryDisplay(IQuizCountry country) {
-			this(country.getName(), country.getCapital(), country.getFlag());
-		}
-		public void setName(String name) {
-			nameText.setText("Name: " + name);
-		}
-
-		public void setCapital(String capital) {
-			capitalText.setText("Capital: " + capital);
-		}
-		
-		public void setFlag(Image flag) {
-			flagImage.setImage(flag);
-		}
-
-		public void updateCountry(IQuizCountry theNextCountry) {
-			setName(theNextCountry.getName());
-			setCapital(theNextCountry.getCapital());
-			setFlag(theNextCountry.getFlag());
-		}
-	}
 	
 	@SuppressWarnings("unchecked")
 	@Override 
@@ -109,12 +63,9 @@ public class Controller extends Application {
 						}
 						else if (model.moreCountriesInQuiz()){
 //							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
-							guessed.setName(locale.getDisplayCountry());
-							
 							Country country = Country.valueOf(locale.getCountry());
 							IQuizCountry selectedQuizCountry = model.masterList[country.ordinal()];
-							guessed.setCapital(selectedQuizCountry.getCapital());
-							guessed.setFlag(selectedQuizCountry.getFlag());
+							guessed.updateCountry(selectedQuizCountry);
 						}
 						System.out.println(locale.getISO3Country());
 					})
