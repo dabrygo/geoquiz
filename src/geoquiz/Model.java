@@ -24,6 +24,8 @@ public class Model {
 	private IQuizCountry[] europe;
 	private IQuizCountry[] australia;
 	private IQuizCountry[] world;
+	
+	IQuizCountry[] masterList;
 	private Random random;
 	
 	public Model() {
@@ -62,6 +64,19 @@ public class Model {
 	        	world[i++] = quizCountry;
         	}
         	catch (NullPointerException | MissingResourceException e) { 
+        		System.err.println("Could not register " + country.getName());
+        	}
+        }
+        
+		masterList = new IQuizCountry[Country.values().length];
+		i = 0;
+        for (Country country : Country.values()) {
+        	try {
+	        	IQuizCountry quizCountry = assignQuizCountry(country);
+	        	masterList[i++] = quizCountry;
+        	}
+        	catch (NullPointerException | MissingResourceException e) {
+        		i++;
         		System.err.println("Could not register " + country.getName());
         	}
         }

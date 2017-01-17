@@ -1,7 +1,6 @@
 package geoquiz;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -56,9 +55,9 @@ class QuizCountry implements IQuizCountry {
 
 class PictorialQuizCountry extends QuizCountry {
 	private static HashMap<String, String[]> capitals;
+	
 	private Image flag;
-
-	protected String capital;
+	private String capital;
 
 	static {
 		capitals = new HashMap<>();
@@ -72,9 +71,6 @@ class PictorialQuizCountry extends QuizCountry {
 			}
 			reader.close();
 		} 
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -88,6 +84,11 @@ class PictorialQuizCountry extends QuizCountry {
 		String countryAbbreviation = country.name().toLowerCase();
 		String imageName = "/png250px/" + countryAbbreviation + ".png";
 		flag = new Image(Png250px.class.getResourceAsStream(imageName));
+	}
+
+	@Override
+	public String getCapital() {
+		return capital;
 	}
 
 	@Override
