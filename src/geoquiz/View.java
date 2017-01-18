@@ -52,7 +52,6 @@ public class View extends SplitPane {
 		progress = new Text();
 		progress.setFont(new Font(36.0));
 		result = new Text();
-		regions = new ToggleGroup();
 		center = new VBox(progress, result, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld, navigator);
 	} 
 

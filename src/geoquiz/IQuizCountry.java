@@ -53,6 +53,10 @@ class QuizCountry implements IQuizCountry {
 	}
 }
 
+/**
+ * @author dbgod
+ *
+ */
 class PictorialQuizCountry extends QuizCountry {
 	private static HashMap<String, String[]> capitals;
 	

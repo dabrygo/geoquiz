@@ -39,6 +39,7 @@ public class Controller extends Application {
 			view.regions.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 					String code = (String)newToggle.getUserData();
+					System.out.println(code);
 					model.changeQuizCountries(code);
 					clues.updateCountry(model.currentCountry());;
 					updateProgressText();
@@ -58,16 +59,18 @@ public class Controller extends Application {
 						CountryPath countryPath = (CountryPath) evt.getSource();
 						Locale locale = countryPath.getLocale();
 						String selectedIso = model.currentCountry().getAbbreviation();
+
+						Country country = Country.valueOf(locale.getCountry());
+						IQuizCountry selectedQuizCountry = model.masterList[country.ordinal()];
 						if (locale.getISO3Country().equals(selectedIso)) {
 							goToNextCountry();
 						}
 						else if (model.moreCountriesInQuiz()){
 //							result.setText("Incorrect! That's "  + locale.getDisplayCountry() + ".");
-							Country country = Country.valueOf(locale.getCountry());
-							IQuizCountry selectedQuizCountry = model.masterList[country.ordinal()];
 							guessed.updateCountry(selectedQuizCountry);
 						}
-						System.out.println(locale.getISO3Country());
+//						System.out.println(locale.getISO3Country());
+						System.out.println(locale.getCountry());
 					})
 					.zoomEnabled(true)
 					.selectionEnabled(true)

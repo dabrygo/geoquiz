@@ -28,6 +28,7 @@ public class CountryDisplay extends FlowPane {
 	public CountryDisplay(IQuizCountry country) {
 		this(country.getName(), country.getCapital(), country.getFlag());
 	}
+	
 	public void setName(String name) {
 		nameText.setText("Name: " + name);
 	}
