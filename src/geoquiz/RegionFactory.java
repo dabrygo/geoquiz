@@ -6,35 +6,31 @@ import eu.hansolo.fx.world.Country;
 
 public class RegionFactory {
 	static Region regionFrom(String code) {
-		if (code.equals("AS")) {
+		switch (code) {
+		case "AS":
 			return new Asia(false);
-		}
-		if (code.equals("AF")) {
+		case "AF":
 			return new Africa(false);
-		}
-		if (code.equals("NA")) {
+		case "NA":
 			return new NorthAmerica(false);
-		}
-		if (code.equals("SA")) {
+		case "SA":
 			return new SouthAmerica(false);
-		}
-		if (code.equals("EU")) {
+		case "EU":
 			return new Europe(false);
-		}
-		if (code.equals("AU")) {
+		case "AU":
 			return new Australia(false);
-		}
-		if (code.equals("WORLD")) {
+		case "WORLD":
 			return new World(false);
+		default:
+			return null;
 		}
-		return null;
 	}
 }
 
 class Region {
 	IQuizCountry[] quizCountries;
 	boolean useLightWeight;
-	
+
 	public Region(boolean useLightWeight, Country... countries) {
 		this.useLightWeight = useLightWeight;
 		quizCountries = new IQuizCountry[countries.length];
@@ -57,12 +53,9 @@ class Asia extends Region {
 
 class Africa extends Region {
 	public Africa(boolean useLightWeight) {
-		super(useLightWeight, MA, DZ, TN, LY, EG, SD, TD, NE, ML, MR, 
-							  SN, GW, GN, SL, LR, CI, BF, GH, TG, BJ, 
-							  NG, CM, CF, SS, ET, SO, KE, UG, CD, CG, 
-							  GA, GQ, AO, ZM, TZ, MZ, MW, MG, MZ, ZW, 
-							  ZM, AO, NA, BW, ZA, LS, SZ, KM, RE, MU,
-							  RW, BI);
+		super(useLightWeight, MA, DZ, TN, LY, EG, SD, TD, NE, ML, MR, SN, GW, GN, SL, LR, CI, BF, GH, TG, BJ, NG, CM,
+				CF, SS, ET, SO, KE, UG, CD, CG, GA, GQ, AO, ZM, TZ, MZ, MW, MG, MZ, ZW, ZM, AO, NA, BW, ZA, LS, SZ, KM,
+				RE, MU, RW, BI);
 	}
 }
 
@@ -76,7 +69,7 @@ class SouthAmerica extends Region {
 	public SouthAmerica(boolean useLightWeight) {
 		super(useLightWeight, BR);
 	}
-	
+
 }
 
 class Europe extends Region {
