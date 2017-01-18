@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import eu.hansolo.fx.world.Country;
 import javafx.scene.image.Image;
@@ -25,7 +26,12 @@ class QuizCountry implements IQuizCountry {
 	public QuizCountry(Country country) {
 		Locale locale = new Locale("", country.name());
 		name = locale.getDisplayCountry();
-		iso3name = locale.getISO3Country();
+		try {
+			iso3name = locale.getISO3Country();
+		}
+		catch (MissingResourceException e) {
+			iso3name = "";
+		}
 	}
 	
 	@Override
@@ -87,7 +93,12 @@ class PictorialQuizCountry extends QuizCountry {
 				: "";
 		String countryAbbreviation = country.name().toLowerCase();
 		String imageName = "/png250px/" + countryAbbreviation + ".png";
-		flag = new Image(Png250px.class.getResourceAsStream(imageName));
+		try {
+			flag = new Image(Png250px.class.getResourceAsStream(imageName));
+		}
+		catch (NullPointerException e) {
+			flag = null;
+		}
 	}
 
 	@Override
