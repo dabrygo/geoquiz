@@ -4,16 +4,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class Model {
-
+	public static final Continent DEFAULT_CONTINENT = Continent.SOUTH_AMERICA;
 	List<IQuizCountry> masterList;
 	List<IQuizCountry> quizCountries;
 	int index;
 
-
 	public Model() {
-		masterList = RegionFactory.regionFrom("WORLD");
+		masterList = RegionFactory.regionFrom(Continent.WORLD);
 
-		changeQuizCountries("NA");
+		changeQuizCountries(DEFAULT_CONTINENT);
 	}
 
 	public IQuizCountry currentCountry() {
@@ -29,16 +28,13 @@ public class Model {
 
 	public IQuizCountry nextCountry() {
 		index++;
-		if (!moreCountriesInQuiz()) {
-			return new NullCountry();
-		}
 		return currentCountry();
 	}
 
-	public void changeQuizCountries(String region) {
-		Region continent = RegionFactory.regionFrom(region);
+	public void changeQuizCountries(Continent regionCode) {
+		Region continent = RegionFactory.regionFrom(regionCode);
 		if (continent == null) {
-			throw new IllegalArgumentException(String.format("Unknown region code '%s'", region));
+			throw new IllegalArgumentException(String.format("Unknown region code '%s'", regionCode));
 		}
 		quizCountries = continent;
 		Collections.shuffle(quizCountries);

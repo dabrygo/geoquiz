@@ -71,14 +71,8 @@ public class TestModel {
 	@Test
 	public void test_number_completed_resets_when_new_continent_chosen() {
 		model.nextCountry();
-		model.changeQuizCountries("AS");
+		model.changeQuizCountries(Continent.ASIA);
 		assertEquals(0, model.index);
-	}
-	
-	@Test
-	public void test_illegal_continent_code_throws_exception() {
-		thrown.expect(IllegalArgumentException.class);
-		model.changeQuizCountries("XXX");
 	}
 	
 	@Ignore("Don't know first country when using Collections.shuffle")

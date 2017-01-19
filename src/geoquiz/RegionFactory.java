@@ -7,27 +7,31 @@ import java.util.ArrayList;
 import eu.hansolo.fx.world.Country;
 
 public class RegionFactory {
-	static Region regionFrom(String code) {
+	static Region regionFrom(Continent code) {
 		switch (code) {
-		case "AS":
+		case ASIA:
 			return new Asia(false);
-		case "AF":
+		case AFRICA:
 			return new Africa(false);
-		case "NA":
+		case NORTH_AMERICA:
 			return new NorthAmerica(false);
-		case "SA":
+		case SOUTH_AMERICA:
 			return new SouthAmerica(false);
-		case "EU":
+		case EUROPE:
 			return new Europe(false);
-		case "AU":
+		case AUSTRALIA:
 			return new Australia(false);
-		case "WORLD":
+		case WORLD:
 			return new World(false);
 		default:
 			return null;
 		}
 	}
 }
+
+enum Continent {
+	ASIA, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, EUROPE, AUSTRALIA, WORLD
+};
 
 class Region extends ArrayList<IQuizCountry> {
 	private static final long serialVersionUID = 1L;

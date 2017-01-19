@@ -48,9 +48,8 @@ public class Controller extends Application {
 
 		view.getRegionRadioButtons().selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 		    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
-				String code = (String)newToggle.getUserData();
-				System.out.println(code);
-				model.changeQuizCountries(code);
+				Continent continent = (Continent)newToggle.getUserData();
+				model.changeQuizCountries(continent);
 				view.updateClueCountry(model.currentCountry());
 				view.updateProgress(model.index, model.quizCountries.size());
 		    }
