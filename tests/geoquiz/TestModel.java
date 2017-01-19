@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,11 +19,11 @@ public class TestModel {
 
 	@Before
 	public void setUp() {
-		model = new Model(new Long(1));
+		model = new Model();
 	}
 	
 	private void completeAllQuestions() {
-		model.quizCountries.clear();
+		model.index = model.quizCountries.size();
 	}
 
 	@Test
@@ -31,42 +32,47 @@ public class TestModel {
 	}
 
 	@Test
-	public void test_empty_quiz_when_all_questions_completed() {
+	public void test_no_more_questions_in_quiz_when_all_questions_completed() {
 		completeAllQuestions();
 		assertFalse(model.moreCountriesInQuiz());
 	}
 	
 	@Test
-	public void test_null_flag_when_all_questions_completed() {
+	public void test_null_country_when_all_questions_completed() {
 		completeAllQuestions();
-		assertNull(model.nextCountry());
+		assertTrue(model.nextCountry() instanceof NullCountry);
 	}
 	
 	@Test
-	public void test_one_less_country_when_move_to_next_question() {
-		int originalSize = model.countriesLeft();
+	public void test_null_flag_when_all_questions_completed() {
+		completeAllQuestions();
+		assertNull(model.nextCountry().getFlag());
+	}
+	
+	@Test
+	public void test_index_increments_when_move_to_next_question() {
+		int originalIndex = model.index;
 		model.nextCountry();
-		assertTrue(model.countriesLeft() < originalSize);
+		assertEquals(originalIndex + 1, model.index);
 	}
 	
 	@Test
 	public void test_name_of_country_when_all_questions_completed() {
 		completeAllQuestions();
-		System.out.println(model.currentCountry());
 		assertEquals("", model.currentCountry().getName());
 	}
 	
 	@Test
 	public void test_number_completed_increments_when_next_country_called() {
 		model.nextCountry();
-		assertEquals(1, model.completed);
+		assertEquals(1, model.index);
 	}
 	
 	@Test
 	public void test_number_completed_resets_when_new_continent_chosen() {
 		model.nextCountry();
 		model.changeQuizCountries("AS");
-		assertEquals(0, model.completed);
+		assertEquals(0, model.index);
 	}
 	
 	@Test
@@ -75,11 +81,13 @@ public class TestModel {
 		model.changeQuizCountries("XXX");
 	}
 	
+	@Ignore("Don't know first country when using Collections.shuffle")
 	@Test
 	public void test_know_full_name_of_country() {
 		assertEquals("Vietnam", model.currentCountry().getName());
 	}
-	
+
+	@Ignore("Don't know first country when using Collections.shuffle")
 	@Test
 	public void test_know_iso_code_of_country() {
 		assertEquals("VNM", model.currentCountry().getAbbreviation());

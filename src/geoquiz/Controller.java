@@ -31,7 +31,7 @@ public class Controller extends Application {
 					String selectedIso = model.currentCountry().getAbbreviation();
 
 					Country country = Country.valueOf(locale.getCountry());
-					IQuizCountry selectedQuizCountry = model.masterList[country.ordinal()];
+					IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
 					if (locale.getISO3Country().equals(selectedIso)) {
 						goToNextCountry();
 					}
@@ -52,7 +52,7 @@ public class Controller extends Application {
 				System.out.println(code);
 				model.changeQuizCountries(code);
 				view.updateClueCountry(model.currentCountry());
-				view.updateProgress(model.completed, model.originalSize);
+				view.updateProgress(model.index, model.quizCountries.size());
 		    }
 		});
 		
@@ -69,7 +69,7 @@ public class Controller extends Application {
 
 	private void goToNextCountry() {
 		view.updateClueCountry(model.nextCountry());
-		view.updateProgress(model.completed, model.originalSize);
+		view.updateProgress(model.index, model.quizCountries.size());
 		
 		view.updateGuessedCountry(new NullCountry());
 	}

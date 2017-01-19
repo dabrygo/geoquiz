@@ -2,6 +2,8 @@ package geoquiz;
 
 import static eu.hansolo.fx.world.Country.*;
 
+import java.util.ArrayList;
+
 import eu.hansolo.fx.world.Country;
 
 public class RegionFactory {
@@ -27,16 +29,14 @@ public class RegionFactory {
 	}
 }
 
-class Region {
-	IQuizCountry[] quizCountries;
+class Region extends ArrayList<IQuizCountry> {
+	private static final long serialVersionUID = 1L;
 	boolean useLightWeight;
 
 	public Region(boolean useLightWeight, Country... countries) {
 		this.useLightWeight = useLightWeight;
-		quizCountries = new IQuizCountry[countries.length];
-		int i = 0;
 		for (Country country : countries) {
-			quizCountries[i++] = assignQuizCountry(country);
+			add(assignQuizCountry(country));
 		}
 	}
 
@@ -46,12 +46,16 @@ class Region {
 }
 
 class Asia extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public Asia(boolean useLightWeight) {
 		super(useLightWeight, RU);
 	}
 }
 
 class Africa extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public Africa(boolean useLightWeight) {
 		super(useLightWeight, MA, DZ, TN, LY, EG, SD, TD, NE, ML, MR, SN, GW, GN, SL, LR, CI, BF, GH, TG, BJ, NG, CM,
 				CF, SS, ET, SO, KE, UG, CD, CG, GA, GQ, AO, ZM, TZ, MZ, MW, MG, MZ, ZW, ZM, AO, NA, BW, ZA, LS, SZ, KM,
@@ -60,12 +64,16 @@ class Africa extends Region {
 }
 
 class NorthAmerica extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public NorthAmerica(boolean useLightWeight) {
 		super(useLightWeight, US, CA);
 	}
 }
 
 class SouthAmerica extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public SouthAmerica(boolean useLightWeight) {
 		super(useLightWeight, BR);
 	}
@@ -73,18 +81,24 @@ class SouthAmerica extends Region {
 }
 
 class Europe extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public Europe(boolean useLightWeight) {
 		super(useLightWeight, GB, IE);
 	}
 }
 
 class Australia extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public Australia(boolean useLightWeight) {
 		super(useLightWeight, AU, NZ);
 	}
 }
 
 class World extends Region {
+	private static final long serialVersionUID = 1L;
+
 	public World(boolean useLightWeight) {
 		super(useLightWeight, Country.values());
 	}
