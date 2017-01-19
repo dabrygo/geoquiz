@@ -1,16 +1,22 @@
 package geoquiz;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import eu.hansolo.fx.world.World;
 
 public class View extends SplitPane {
 	FlowPane left;
@@ -21,14 +27,26 @@ public class View extends SplitPane {
 	private Text result;
 	ToggleGroup regions;
 	Button forward;
+	CountryDisplay clues;
+	CountryDisplay guessed;
 
-	public View() {
+	public View(World world, IQuizCountry initialCountry) {
 		setOrientation(Orientation.VERTICAL);
 		
-		left = new FlowPane();
+		clues = new CountryDisplay(initialCountry);
+		left = new FlowPane(clues);
+		
 		makeCenter();
-		right = new FlowPane();
+		
+		guessed = new CountryDisplay(new NullCountry());
+		right = new FlowPane(guessed);
+		
 		bottom = new HBox(left, center, right);
+
+		StackPane map = new StackPane(world);
+		map.setBackground(new Background(new BackgroundFill(world.getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
+
+		getChildren().addAll(map, bottom);
 	}
 
 	private void makeCenter() {
