@@ -36,7 +36,7 @@ public class Controller extends Application {
 						goToNextCountry();
 					}
 					else if (model.moreCountriesInQuiz()){
-						view.guessed.updateCountry(selectedQuizCountry);
+						view.updateGuessedCountry(selectedQuizCountry);
 					}
 					System.out.println(locale.getCountry());
 				})
@@ -46,17 +46,17 @@ public class Controller extends Application {
 		
 		view = new View(world, model.currentCountry());
 
-		view.regions.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+		view.getRegionRadioButtons().selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 		    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 				String code = (String)newToggle.getUserData();
 				System.out.println(code);
 				model.changeQuizCountries(code);
-				view.clues.updateCountry(model.currentCountry());;
-				updateProgressText();
+				view.updateClueCountry(model.currentCountry());
+				view.updateProgress(model.completed, model.originalSize);
 		    }
 		});
 		
-		view.forward.setOnAction(e -> {
+		view.getForwardButton().setOnAction(e -> {
 			goToNextCountry();
 		});
 
@@ -68,14 +68,10 @@ public class Controller extends Application {
 	}
 
 	private void goToNextCountry() {
-		view.clues.updateCountry(model.nextCountry());
-		updateProgressText();
+		view.updateClueCountry(model.nextCountry());
+		view.updateProgress(model.completed, model.originalSize);
 		
-		view.guessed.updateCountry(new NullCountry());;
-	}
-
-	private void updateProgressText() {
-		view.progress.setText(String.format("%d / %d", model.completed, model.originalSize));
+		view.updateGuessedCountry(new NullCountry());
 	}
 	
 	@Override 
