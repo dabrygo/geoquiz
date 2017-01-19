@@ -35,7 +35,7 @@ public class Controller extends Application {
 					if (locale.getISO3Country().equals(selectedIso)) {
 						goToNextCountry();
 					}
-					else if (model.moreCountriesInQuiz()){
+					else if (model.lastQuestion()){
 						view.updateGuessedCountry(selectedQuizCountry);
 					}
 					System.out.println(locale.getCountry());
@@ -55,6 +55,10 @@ public class Controller extends Application {
 		    }
 		});
 		
+		view.getBackButton().setOnAction(e -> {
+			goToPreviousCountry();
+		});
+		
 		view.getForwardButton().setOnAction(e -> {
 			goToNextCountry();
 		});
@@ -66,10 +70,15 @@ public class Controller extends Application {
 		stage.show();
 	}
 
+	private void goToPreviousCountry() {
+		view.updateClueCountry(model.previousCountry());
+		view.updateProgress(model.index, model.quizCountries.size());
+		view.updateGuessedCountry(new NullCountry());
+	}
+
 	private void goToNextCountry() {
 		view.updateClueCountry(model.nextCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
-		
 		view.updateGuessedCountry(new NullCountry());
 	}
 	

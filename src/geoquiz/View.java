@@ -25,6 +25,7 @@ public class View extends SplitPane {
 	private Button forward;
 	private CountryDisplay clues;
 	private CountryDisplay guessed;
+	private Button back;
 
 	public View(World world, IQuizCountry initialCountry) {
 		setOrientation(Orientation.VERTICAL);
@@ -59,7 +60,7 @@ public class View extends SplitPane {
 			toggle.setSelected(toggle.getUserData().equals(Model.DEFAULT_CONTINENT));
 		}
 
-		Button back = new Button("Back");
+		back = new Button("Back");
 		forward = new Button("Forward");
 
 		HBox navigator = new HBox(back, forward);
@@ -86,6 +87,10 @@ public class View extends SplitPane {
 
 	public void updateClueCountry(IQuizCountry selectedCountry) {
 		clues.updateCountry(selectedCountry);
+	}
+
+	public Button getBackButton() {
+		return back;
 	}
 
 	public Button getForwardButton() {

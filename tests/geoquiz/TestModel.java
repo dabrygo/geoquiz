@@ -28,13 +28,13 @@ public class TestModel {
 
 	@Test
 	public void test_nonempty_quiz_by_default() {
-		assertTrue(model.moreCountriesInQuiz());
+		assertTrue(model.lastQuestion());
 	}
 
 	@Test
 	public void test_no_more_questions_in_quiz_when_all_questions_completed() {
 		completeAllQuestions();
-		assertFalse(model.moreCountriesInQuiz());
+		assertFalse(model.lastQuestion());
 	}
 	
 	@Test

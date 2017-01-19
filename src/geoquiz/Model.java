@@ -16,19 +16,32 @@ public class Model {
 	}
 
 	public IQuizCountry currentCountry() {
-		if (quizCountries == null || !moreCountriesInQuiz()) {
+		if (quizCountries == null) {
 			return new NullCountry();
 		}
 		return quizCountries.get(index);
 	}
 
-	public boolean moreCountriesInQuiz() {
-		return index < quizCountries.size();
+	public IQuizCountry nextCountry() {
+		if (!lastQuestion()) {
+			index++;
+		}
+		return currentCountry();
 	}
 
-	public IQuizCountry nextCountry() {
-		index++;
+	public boolean lastQuestion() {
+		return index == quizCountries.size() - 1;
+	}
+
+	public IQuizCountry previousCountry() {
+		if (!firstQuestion()) {
+			index--;
+		}
 		return currentCountry();
+	}
+	
+	private boolean firstQuestion() {
+		return index == 0;
 	}
 
 	public void changeQuizCountries(Continent regionCode) {
