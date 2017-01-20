@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Model {
-	public static final Continent DEFAULT_CONTINENT = Continent.SOUTH_AMERICA;
+	public static final Continent DEFAULT_CONTINENT = Continent.NORTH_AMERICA;
 	List<IQuizCountry> masterList;
 	List<IQuizCountry> quizCountries;
 	int index;

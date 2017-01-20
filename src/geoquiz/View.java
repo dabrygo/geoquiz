@@ -11,9 +11,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -26,7 +28,11 @@ public class View extends SplitPane {
 	private CountryDisplay clues;
 	private CountryDisplay guessed;
 	private Button back;
+	private FlowPane right;
+	private Text result;
 
+	enum AnswerState {Correct, Incorrect, Unknown};
+	
 	public View(World world, IQuizCountry initialCountry) {
 		setOrientation(Orientation.VERTICAL);
 
@@ -34,9 +40,13 @@ public class View extends SplitPane {
 
 		makeCenter();
 
+		right = new FlowPane(Orientation.VERTICAL);
+		result = new Text();
+		result.setFont(new Font(24.0));;
 		guessed = new CountryDisplay(new NullCountry());
+		right.getChildren().addAll(result, guessed);
 
-		bottom = new HBox(clues, center, guessed);
+		bottom = new HBox(clues, center, right);
 
 		StackPane map = new StackPane(world);
 		map.setBackground(
@@ -81,7 +91,22 @@ public class View extends SplitPane {
 		progress.setText(String.format("%d / %d", currentQuestion, total));
 	}
 
-	public void updateGuessedCountry(IQuizCountry selectedCountry) {
+	public void updateGuessedCountry(IQuizCountry selectedCountry, AnswerState answerState) {
+		String resultText;
+		switch(answerState) {
+		case Correct: 
+			resultText = "Correct!"; 
+			result.setFill(Color.GREEN);
+			break;
+		case Incorrect: 
+			resultText = "Incorrect"; 
+			result.setFill(Color.RED);
+			break;
+		default: 
+			resultText = "";
+			result.setFill(null);
+		}
+		result.setText(resultText);
 		guessed.updateCountry(selectedCountry);
 	}
 

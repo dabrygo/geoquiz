@@ -5,6 +5,7 @@ import eu.hansolo.fx.world.Country;
 import eu.hansolo.fx.world.CountryPath;
 import eu.hansolo.fx.world.World;
 import eu.hansolo.fx.world.World.Resolution;
+import geoquiz.View.AnswerState;
 import eu.hansolo.fx.world.WorldBuilder;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -31,14 +32,15 @@ public class Controller extends Application {
 					String selectedIso = model.currentCountry().getAbbreviation();
 
 					Country country = Country.valueOf(locale.getCountry());
+					System.out.println(locale.getISO3Country());
+					System.out.println(selectedIso);
 					IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
-					if (locale.getISO3Country().equals(selectedIso)) {
-						goToNextCountry();
+					if (!model.lastQuestion()){
+						AnswerState answerState = selectedIso.equals(locale.getISO3Country())
+												? AnswerState.Correct
+												: AnswerState.Incorrect;
+						view.updateGuessedCountry(selectedQuizCountry, answerState);
 					}
-					else if (model.lastQuestion()){
-						view.updateGuessedCountry(selectedQuizCountry);
-					}
-					System.out.println(locale.getCountry());
 				})
 				.zoomEnabled(true)
 				.selectionEnabled(true)
@@ -73,13 +75,13 @@ public class Controller extends Application {
 	private void goToPreviousCountry() {
 		view.updateClueCountry(model.previousCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
-		view.updateGuessedCountry(new NullCountry());
+		view.updateGuessedCountry(new NullCountry(), AnswerState.Unknown);
 	}
 
 	private void goToNextCountry() {
 		view.updateClueCountry(model.nextCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
-		view.updateGuessedCountry(new NullCountry());
+		view.updateGuessedCountry(new NullCountry(), AnswerState.Unknown);
 	}
 	
 	@Override 

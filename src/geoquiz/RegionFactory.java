@@ -64,7 +64,6 @@ abstract class Region extends ArrayList<IQuizCountry> {
 			BufferedReader reader = new BufferedReader(new FileReader(Paths.get("rsc", "geoquiz", getFileName() + ".txt").toFile()));
 			while ((line = reader.readLine()) != null) {
 				String[] data = line.split(",");	
-				System.out.println("country Name " + data[0]);
 				if (codesToNames.containsKey(data[0])) {
 					add(assignQuizCountry(codesToNames.get(data[0])));
 				}
