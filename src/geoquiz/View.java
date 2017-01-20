@@ -3,6 +3,7 @@ package geoquiz;
 import eu.hansolo.fx.world.World;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
@@ -10,24 +11,27 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class View extends SplitPane {
 	private VBox center;
-	private HBox bottom;
+	private BorderPane bottom;
 	private Text progress;
 	private ToggleGroup regions;
-	private Button forward;
+	private Button nextButton;
 	private CountryDisplay clues;
 	private CountryDisplay guessed;
-	private Button back;
+	private Button previousButton;
 	private FlowPane right;
 	private Text result;
 
@@ -46,7 +50,24 @@ public class View extends SplitPane {
 		guessed = new CountryDisplay(new NullCountry());
 		right.getChildren().addAll(result, guessed);
 
-		bottom = new HBox(clues, center, right);
+		bottom = new BorderPane();
+
+		previousButton = new Button("Previous");
+		nextButton = new Button("Next");
+		HBox navigator = new HBox(previousButton, nextButton);
+		HBox.setHgrow(previousButton, Priority.ALWAYS);
+		HBox.setHgrow(nextButton, Priority.ALWAYS);
+		previousButton.setMaxWidth(Double.MAX_VALUE);
+		nextButton.setMaxWidth(Double.MAX_VALUE);
+
+		result.setTextAlignment(TextAlignment.CENTER);
+		bottom.setTop(result);
+		BorderPane.setAlignment(result, Pos.CENTER);
+		bottom.setLeft(clues);
+		bottom.setCenter(center);
+		bottom.setRight(guessed);
+		BorderPane.setAlignment(guessed, Pos.TOP_LEFT);
+		bottom.setBottom(navigator);
 
 		StackPane map = new StackPane(world);
 		map.setBackground(
@@ -70,14 +91,9 @@ public class View extends SplitPane {
 			toggle.setSelected(toggle.getUserData().equals(Model.DEFAULT_CONTINENT));
 		}
 
-		back = new Button("Back");
-		forward = new Button("Forward");
-
-		HBox navigator = new HBox(back, forward);
-
 		progress = new Text();
 		progress.setFont(new Font(36.0));
-		center = new VBox(progress, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld, navigator);
+		center = new VBox(progress, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld);
 	}
 
 	private RadioButton newRegion(String name, Continent continent) {
@@ -114,12 +130,12 @@ public class View extends SplitPane {
 		clues.updateCountry(selectedCountry);
 	}
 
-	public Button getBackButton() {
-		return back;
+	public Button getPreviousButton() {
+		return previousButton;
 	}
 
-	public Button getForwardButton() {
-		return forward;
+	public Button getNextButton() {
+		return nextButton;
 	}
 
 	public ToggleGroup getRegionRadioButtons() {

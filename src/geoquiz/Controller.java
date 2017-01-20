@@ -57,11 +57,11 @@ public class Controller extends Application {
 		    }
 		});
 		
-		view.getBackButton().setOnAction(e -> {
+		view.getPreviousButton().setOnAction(e -> {
 			goToPreviousCountry();
 		});
 		
-		view.getForwardButton().setOnAction(e -> {
+		view.getNextButton().setOnAction(e -> {
 			goToNextCountry();
 		});
 
