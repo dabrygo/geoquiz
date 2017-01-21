@@ -5,11 +5,13 @@ import geoquiz.Model.AnswerState;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -151,5 +153,13 @@ public class View extends SplitPane {
 
 	public ToggleGroup getRegionRadioButtons() {
 		return regions;
+	}
+	
+	public Alert skipCountryDialog() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Skip Country");
+		alert.setHeaderText("");
+		alert.setContentText("Do you want to skip this country?");
+		return alert;
 	}
 }

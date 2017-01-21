@@ -13,7 +13,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
 import javafx.stage.Stage;
@@ -84,10 +83,7 @@ public class Controller extends Application {
 		
 		view.getNextButton().setOnAction(e -> {
 			if (!model.getAnswerState().equals(AnswerState.CORRECT)) {
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Skip Country");
-				alert.setHeaderText("");
-				alert.setContentText("Do you want to skip this country?");
+				Alert alert = view.skipCountryDialog();
 
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK){
