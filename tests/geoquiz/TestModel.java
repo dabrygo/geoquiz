@@ -5,11 +5,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import eu.hansolo.fx.world.Country;
 
 public class TestModel {
 	@Rule 
@@ -28,13 +32,13 @@ public class TestModel {
 
 	@Test
 	public void test_nonempty_quiz_by_default() {
-		assertFalse(model.lastQuestion());
+		assertTrue(model.moreQuestionsInQuiz());
 	}
 
 	@Test
 	public void test_no_more_questions_in_quiz_when_all_questions_completed() {
 		completeAllQuestions();
-		assertFalse(model.lastQuestion());
+		assertFalse(model.moreQuestionsInQuiz());
 	}
 	
 	@Test
@@ -85,5 +89,13 @@ public class TestModel {
 	@Test
 	public void test_know_iso_code_of_country() {
 		assertEquals("VNM", model.currentCountry().getAbbreviation());
+	}
+	
+	@Test
+	public void test_every_country_has_a_name() {
+		for (Country country : Country.values()) {
+			Locale locale = new Locale("", country.name());
+			assertFalse(locale.getDisplayCountry().equals(""));
+		}
 	}
 }

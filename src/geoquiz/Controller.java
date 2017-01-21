@@ -38,7 +38,7 @@ public class Controller extends Application {
 					System.out.println(locale.getCountry());
 					System.out.println(selectedIso);
 					IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
-					if (!model.lastQuestion()){
+					if (model.moreQuestionsInQuiz()){
 						AnswerState answerState = selectedIso.equals(locale.getISO3Country())
 												? AnswerState.CORRECT
 												: AnswerState.INCORRECT;
@@ -82,6 +82,9 @@ public class Controller extends Application {
 		});
 		
 		view.getNextButton().setOnAction(e -> {
+			if (!model.moreQuestionsInQuiz()) {
+				return;
+			}
 			if (!model.getAnswerState().equals(AnswerState.CORRECT)) {
 				Alert alert = view.skipCountryDialog();
 

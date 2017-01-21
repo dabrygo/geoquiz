@@ -108,6 +108,7 @@ Malawi,Lilongwe
 Malaysia,Kuala Lumpur (legislative; de facto)| Putrajaya (administrative),Kuala Lumpur,Maldives,Malé
 Mali,Bamako
 Malta,Valletta,Birkirkara| St. Paul's Bay| Mosta| Sliema| Qormi| Zabbar| Naxxar| San Gwann| Marsaskala| Zebbug| Fgura| Rabat| Zejtun| Zurrieq| Attard| St. Julian's| Swieqi| Mellieha| Birzebbuga| Hamrun| Msida| Tarxien| Siggiewi| Gzira| Paola| Santa Venera| Victoria (Gozo),Marshall Islands,Majuro
+Martinique,Fort-de-France (prefecture)
 Mauritania,Nouakchott
 Mauritius,Port Louis
 Mexico,Mexico City

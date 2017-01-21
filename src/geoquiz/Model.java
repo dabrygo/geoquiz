@@ -31,14 +31,14 @@ public class Model {
 	}
 
 	public IQuizCountry nextCountry() {
-		if (index <= quizCountries.size()) {
+		if (moreQuestionsInQuiz()) {
 			index++;
 		}
 		return currentCountry();
 	}
 
-	public boolean lastQuestion() {
-		return index == quizCountries.size() - 1;
+	boolean moreQuestionsInQuiz() {
+		return index < quizCountries.size();
 	}
 
 	public IQuizCountry previousCountry() {
