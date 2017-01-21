@@ -97,7 +97,24 @@ class PictorialQuizCountry extends QuizCountry {
 			flag = new Image(Png250px.class.getResourceAsStream(imageName));
 		}
 		catch (NullPointerException e) {
-			flag = null;
+			if (name.equals("Guadeloupe") || name.equals("Saint Pierre And Miquelon")) {
+				imageName = "/png250px/fr.png"; // same as france
+				flag = new Image(Png250px.class.getResourceAsStream(imageName));
+			}
+			else if (name.equals("Dominica")) {
+				imageName = "/geoquiz/dq.png"; 
+				try {
+					flag = new Image(getClass().getResourceAsStream(imageName));
+				}
+				catch (Exception e2) {
+					System.out.println(imageName);
+					e2.printStackTrace();
+				}
+			}
+			else {
+				System.err.println("No flag found for " + name + " (" + countryAbbreviation + ")");
+				flag = null;
+			}
 		}
 	}
 
