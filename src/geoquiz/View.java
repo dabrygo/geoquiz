@@ -35,6 +35,8 @@ public class View extends SplitPane {
 	private Button previousButton;
 	private FlowPane right;
 	private Text result;
+	Text correct;
+	Text incorrect;
 	
 	public View(World world, IQuizCountry initialCountry) {
 		setOrientation(Orientation.VERTICAL);
@@ -45,23 +47,22 @@ public class View extends SplitPane {
 
 		right = new FlowPane(Orientation.VERTICAL);
 		result = new Text();
-		result.setFont(new Font(24.0));;
+		result.setFont(new Font(24.0));
+		correct = new Text("Correct: " + 0);
+		correct.setFont(new Font(24.0));
+		incorrect = new Text("Incorrect: " + 0);
+		incorrect.setFont(new Font(24.0));
 		guessed = new CountryDisplay(new NullCountry());
-		right.getChildren().addAll(result, guessed);
+		right.getChildren().addAll(guessed);
 
 		bottom = new BorderPane();
 
-		previousButton = new Button("Previous");
-		nextButton = new Button("Next");
-		HBox navigator = new HBox(previousButton, nextButton);
-		HBox.setHgrow(previousButton, Priority.ALWAYS);
-		HBox.setHgrow(nextButton, Priority.ALWAYS);
-		previousButton.setMaxWidth(Double.MAX_VALUE);
-		nextButton.setMaxWidth(Double.MAX_VALUE);
+		HBox navigator = makeNavigationButtons();
 
 		result.setTextAlignment(TextAlignment.CENTER);
-		bottom.setTop(result);
-		BorderPane.setAlignment(result, Pos.CENTER);
+		correct.setTextAlignment(TextAlignment.LEFT);
+		HBox top = new HBox(incorrect, result, correct);
+		bottom.setTop(top);
 		bottom.setLeft(clues);
 		bottom.setCenter(center);
 		bottom.setRight(guessed);
@@ -73,6 +74,17 @@ public class View extends SplitPane {
 				new Background(new BackgroundFill(world.getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
 
 		getItems().addAll(map, bottom);
+	}
+
+	private HBox makeNavigationButtons() {
+		previousButton = new Button("Previous");
+		nextButton = new Button("Next");
+		HBox navigator = new HBox(previousButton, nextButton);
+		HBox.setHgrow(previousButton, Priority.ALWAYS);
+		HBox.setHgrow(nextButton, Priority.ALWAYS);
+		previousButton.setMaxWidth(Double.MAX_VALUE);
+		nextButton.setMaxWidth(Double.MAX_VALUE);
+		return navigator;
 	}
 
 	private void makeCenter() {
@@ -109,11 +121,11 @@ public class View extends SplitPane {
 	public void updateGuessedCountry(IQuizCountry selectedCountry, AnswerState answerState) {
 		String resultText;
 		switch(answerState) {
-		case Correct: 
+		case CORRECT: 
 			resultText = "Correct!"; 
 			result.setFill(Color.GREEN);
 			break;
-		case Incorrect: 
+		case INCORRECT: 
 			resultText = "Incorrect"; 
 			result.setFill(Color.RED);
 			break;

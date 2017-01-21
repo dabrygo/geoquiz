@@ -6,16 +6,20 @@ import java.util.List;
 public class Model {
 	public static final Continent DEFAULT_CONTINENT = Continent.NORTH_AMERICA;
 
-	enum AnswerState {Correct, Incorrect, Unknown};
+	enum AnswerState {CORRECT, INCORRECT, UNKNOWN};
 	
 	List<IQuizCountry> masterList;
 	List<IQuizCountry> quizCountries;
 	int index;
+	int correctTally;
 	private AnswerState answerState;
+	int incorrectTally;
 
 	public Model() {
 		masterList = RegionFactory.regionFrom(Continent.WORLD, false);
-		answerState = AnswerState.Unknown;
+		answerState = AnswerState.UNKNOWN;
+		correctTally = 0;
+		incorrectTally = 0;
 		changeQuizCountries(DEFAULT_CONTINENT);
 	}
 
@@ -53,6 +57,8 @@ public class Model {
 		quizCountries = continent;
 		Collections.shuffle(quizCountries);
 		index = 0;
+		correctTally = 0;
+		incorrectTally = 0;
 	}
 	
 	public void setAnswerState(AnswerState answerState) {
