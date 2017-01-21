@@ -1,5 +1,6 @@
 package geoquiz;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,18 +12,17 @@ public class Model {
 	List<IQuizCountry> masterList;
 	List<IQuizCountry> quizCountries;
 	int index;
-	int correctTally;
-	private AnswerState answerState;
-	int incorrectTally;
+	AnswerState[] answerStates;
 	private IRegionFactory regionFactory;
 
 	public Model(IRegionFactory regionFactory) {
 		masterList = regionFactory.regionFrom(Continent.WORLD);
-		answerState = AnswerState.UNKNOWN;
-		correctTally = 0;
-		incorrectTally = 0;
 		this.regionFactory = regionFactory;
 		changeQuizCountries(DEFAULT_CONTINENT);
+		answerStates = new AnswerState[quizCountries.size()];
+		for (int i = 0; i < answerStates.length; i++) {
+			answerStates[i] = AnswerState.UNKNOWN;
+		}
 	}
 
 	public IQuizCountry currentCountry() {
@@ -32,8 +32,9 @@ public class Model {
 		return quizCountries.get(index);
 	}
 
-	public IQuizCountry nextCountry() {
+	public IQuizCountry nextCountry(AnswerState answerState) {
 		if (moreQuestionsInQuiz()) {
+			answerStates[index] = answerState;
 			index++;
 		}
 		return currentCountry();
@@ -56,15 +57,29 @@ public class Model {
 		quizCountries = continent;
 		Collections.shuffle(quizCountries);
 		index = 0;
-		correctTally = 0;
-		incorrectTally = 0;
+		answerStates = new AnswerState[quizCountries.size()];
+		for (int i = 0; i < answerStates.length; i++) {
+			answerStates[i] = AnswerState.UNKNOWN;
+		}
 	}
 	
 	public void setAnswerState(AnswerState answerState) {
-		this.answerState = answerState;
+		answerStates[index] = answerState;
 	}
 	
 	public AnswerState getAnswerState() {
-		return answerState;
+		return answerStates[index];
+	}
+	
+	public int getCorrectTally() {
+		return (int) Arrays.stream(answerStates)
+						   .filter(state -> state.equals(AnswerState.CORRECT))
+						   .count();
+	}
+	
+	public int getIncorrectTally() {
+		return (int) Arrays.stream(answerStates)
+						   .filter(state -> state.equals(AnswerState.INCORRECT))
+						   .count();
 	}
 }

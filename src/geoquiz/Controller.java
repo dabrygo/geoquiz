@@ -42,21 +42,9 @@ public class Controller extends Application {
 						AnswerState answerState = selectedIso.equals(locale.getISO3Country())
 												? AnswerState.CORRECT
 												: AnswerState.INCORRECT;
-						if (answerState.equals(AnswerState.CORRECT)) {
-							if (model.getAnswerState().equals(AnswerState.INCORRECT)) {
-								model.incorrectTally--;
-							}
-							model.correctTally++;
-							view.correct.setText("Correct: " + model.correctTally);
-						}
-						else {
-							if (model.getAnswerState().equals(AnswerState.UNKNOWN)) {
-								model.incorrectTally++;
-							}
-							view.incorrect.setText("Incorrect: " + model.incorrectTally);
-						}
-
 						model.setAnswerState(answerState);
+						view.correct.setText("Correct: " + model.getCorrectTally());
+						view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
 						view.updateGuessedCountry(selectedQuizCountry, answerState);
 					}
 				})
@@ -72,8 +60,8 @@ public class Controller extends Application {
 				model.changeQuizCountries(continent);
 				view.updateClueCountry(model.currentCountry());
 				view.updateProgress(model.index, model.quizCountries.size());
-				view.correct.setText("Correct: " + model.correctTally);
-				view.incorrect.setText("Incorrect: " + model.incorrectTally);
+				view.correct.setText("Correct: " + model.getCorrectTally());
+				view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
 		    }
 		});
 		
@@ -91,10 +79,9 @@ public class Controller extends Application {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK){
 					goToNextCountry();
-					if (!model.getAnswerState().equals(AnswerState.INCORRECT)) {
-						model.incorrectTally++;
-					}
-					view.incorrect.setText("Incorrect: " + model.incorrectTally);
+					model.setAnswerState(AnswerState.INCORRECT);
+					view.correct.setText("Correct: " + model.getCorrectTally());
+					view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
 				} 
 			}
 			else {
@@ -113,14 +100,12 @@ public class Controller extends Application {
 		view.updateClueCountry(model.previousCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
 		view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
-		model.setAnswerState(AnswerState.UNKNOWN);
 	}
 
 	private void goToNextCountry() {
-		view.updateClueCountry(model.nextCountry());
+		view.updateClueCountry(model.nextCountry(model.getAnswerState()));
 		view.updateProgress(model.index, model.quizCountries.size());
 		view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
-		model.setAnswerState(AnswerState.UNKNOWN);
 	}
 	
 	@Override 

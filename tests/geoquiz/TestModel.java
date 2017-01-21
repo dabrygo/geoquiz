@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import eu.hansolo.fx.world.Country;
+import geoquiz.Model.AnswerState;
 
 public class TestModel {
 	@Rule 
@@ -44,19 +45,19 @@ public class TestModel {
 	@Test
 	public void test_null_country_when_all_questions_completed() {
 		completeAllQuestions();
-		assertTrue(model.nextCountry() instanceof NullCountry);
+		assertTrue(model.nextCountry(null) instanceof NullCountry);
 	}
 	
 	@Test
 	public void test_null_flag_when_all_questions_completed() {
 		completeAllQuestions();
-		assertNull(model.nextCountry().getFlag());
+		assertNull(model.nextCountry(null).getFlag());
 	}
 	
 	@Test
 	public void test_index_increments_when_move_to_next_question() {
 		int originalIndex = model.index;
-		model.nextCountry();
+		model.nextCountry(null);
 		assertEquals(originalIndex + 1, model.index);
 	}
 	
@@ -68,13 +69,13 @@ public class TestModel {
 	
 	@Test
 	public void test_number_completed_increments_when_next_country_called() {
-		model.nextCountry();
+		model.nextCountry(null);
 		assertEquals(1, model.index);
 	}
 	
 	@Test
 	public void test_number_completed_resets_when_new_continent_chosen() {
-		model.nextCountry();
+		model.nextCountry(null);
 		model.changeQuizCountries(Continent.ASIA);
 		assertEquals(0, model.index);
 	}
@@ -109,14 +110,14 @@ public class TestModel {
 	@Test 
 	public void test_country_changes_when_going_forward() {
 		IQuizCountry firstCountry = model.currentCountry();
-		model.nextCountry();
+		model.nextCountry(AnswerState.CORRECT);
 		assertFalse(firstCountry.equals(model.currentCountry()));
 	}
 	
 	@Test 
 	public void test_can_go_back_to_first_country() {
 		IQuizCountry firstCountry = model.currentCountry();
-		model.nextCountry();
+		model.nextCountry(AnswerState.CORRECT);
 		assertEquals(firstCountry, model.previousCountry());
 	}
 }
