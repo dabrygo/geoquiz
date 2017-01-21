@@ -15,12 +15,12 @@ public class Model {
 	private AnswerState answerState;
 	int incorrectTally;
 
-	public Model() {
-		masterList = RegionFactory.regionFrom(Continent.WORLD, false);
+	public Model(boolean lightweight) {
+		masterList = RegionFactory.regionFrom(Continent.WORLD, lightweight);
 		answerState = AnswerState.UNKNOWN;
 		correctTally = 0;
 		incorrectTally = 0;
-		changeQuizCountries(DEFAULT_CONTINENT);
+		changeQuizCountries(DEFAULT_CONTINENT, lightweight);
 	}
 
 	public IQuizCountry currentCountry() {
@@ -49,7 +49,7 @@ public class Model {
 	}
 	
 
-	public void changeQuizCountries(Continent regionCode) {
+	public void changeQuizCountries(Continent regionCode, boolean lightweight) {
 		Region continent = RegionFactory.regionFrom(regionCode, false);
 		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", regionCode));

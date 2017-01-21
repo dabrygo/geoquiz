@@ -25,7 +25,7 @@ public class Controller extends Application {
 	@SuppressWarnings("unchecked")
 	@Override 
 	public void start(Stage stage) {
-		model = new Model();
+		model = new Model(false);
 
 		world = WorldBuilder.create()
 				.resolution(Resolution.HI_RES)
@@ -69,7 +69,7 @@ public class Controller extends Application {
 		view.getRegionRadioButtons().selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 		    public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
 				Continent continent = (Continent)newToggle.getUserData();
-				model.changeQuizCountries(continent);
+				model.changeQuizCountries(continent, false);
 				view.updateClueCountry(model.currentCountry());
 				view.updateProgress(model.index, model.quizCountries.size());
 				view.correct.setText("Correct: " + model.correctTally);
