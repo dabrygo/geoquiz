@@ -11,22 +11,22 @@ import java.util.Locale;
 import eu.hansolo.fx.world.Country;
 
 public class RegionFactory {
-	static Region regionFrom(Continent code) {
+	static Region regionFrom(Continent code, boolean lightweight) {
 		switch (code) {
 		case ASIA:
-			return new Asia(false);
+			return new Asia(lightweight);
 		case AFRICA:
-			return new Africa(false);
+			return new Africa(lightweight);
 		case NORTH_AMERICA:
-			return new NorthAmerica(false);
+			return new NorthAmerica(lightweight);
 		case SOUTH_AMERICA:
-			return new SouthAmerica(false);
+			return new SouthAmerica(lightweight);
 		case EUROPE:
-			return new Europe(false);
+			return new Europe(lightweight);
 		case AUSTRALIA:
-			return new Australia(false);
+			return new Australia(lightweight);
 		case WORLD:
-			return new World(false);
+			return new World(lightweight);
 		default:
 			return null;
 		}

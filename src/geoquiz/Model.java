@@ -10,7 +10,7 @@ public class Model {
 	int index;
 
 	public Model() {
-		masterList = RegionFactory.regionFrom(Continent.WORLD);
+		masterList = RegionFactory.regionFrom(Continent.WORLD, true);
 
 		changeQuizCountries(DEFAULT_CONTINENT);
 	}
@@ -42,7 +42,7 @@ public class Model {
 	
 
 	public void changeQuizCountries(Continent regionCode) {
-		Region continent = RegionFactory.regionFrom(regionCode);
+		Region continent = RegionFactory.regionFrom(regionCode, true);
 		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", regionCode));
 		}
