@@ -16,12 +16,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Controller extends Application {
     private World world;
     private Model model;
     private View view;
+    private CountryPath countryPath;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -29,7 +31,7 @@ public class Controller extends Application {
         model = new Model(new RegionFactory());
 
         world = WorldBuilder.create().resolution(Resolution.HI_RES).mousePressHandler(evt -> {
-            CountryPath countryPath = (CountryPath) evt.getSource();
+            countryPath = (CountryPath) evt.getSource();
             Locale locale = countryPath.getLocale();
             String desiredIso = model.currentCountry().getAbbreviation();
 
@@ -88,12 +90,21 @@ public class Controller extends Application {
     }
 
     private void goToPreviousCountry() {
+        unhighlightSelectedCountry();
         view.updateClueCountry(model.previousCountry());
         view.updateProgress(model.index, model.quizCountries.size());
         view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
     }
 
+    private void unhighlightSelectedCountry() {
+        if (countryPath != null) {
+            countryPath.setFill(Color.rgb(217, 217, 220, 1.0));
+            countryPath = null;
+        }
+    }
+
     private void goToNextCountry() {
+        unhighlightSelectedCountry();
         view.updateClueCountry(model.nextCountry(model.getAnswerState()));
         view.updateProgress(model.index, model.quizCountries.size());
         view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
