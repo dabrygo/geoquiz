@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TestRegionFactory {
 
-	private IRegionFactory regionFactory;
+	private AbstractRegionFactory regionFactory;
 
 	@Before
 	public void setUp() {

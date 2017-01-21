@@ -14,7 +14,7 @@ enum Continent {
 	ASIA, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, EUROPE, AUSTRALIA, WORLD
 };
 
-public abstract class IRegionFactory {
+public abstract class AbstractRegionFactory {
 	abstract Region regionFrom(Continent code);
 	
 	protected Region makeCountry(Continent code, boolean lightweight) {
@@ -39,13 +39,13 @@ public abstract class IRegionFactory {
 	}
 }
 
-class RegionFactory extends IRegionFactory {
+class RegionFactory extends AbstractRegionFactory {
 	Region regionFrom(Continent code) {
 		return makeCountry(code, false);
 	}
 }
 
-class LightweightRegionFactory extends IRegionFactory {
+class LightweightRegionFactory extends AbstractRegionFactory {
 	Region regionFrom(Continent code) {
 		return makeCountry(code, true);
 	}
