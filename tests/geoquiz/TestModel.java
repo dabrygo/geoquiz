@@ -19,12 +19,11 @@ public class TestModel {
 	@Rule 
 	public ExpectedException thrown = ExpectedException.none();
 	
-	private boolean lightweight = true;
 	private Model model;
 
 	@Before
 	public void setUp() {
-		model = new Model(lightweight);
+		model = new Model(new LightweightRegionFactory());
 	}
 	
 	private void completeAllQuestions() {
@@ -76,7 +75,7 @@ public class TestModel {
 	@Test
 	public void test_number_completed_resets_when_new_continent_chosen() {
 		model.nextCountry();
-		model.changeQuizCountries(Continent.ASIA, lightweight);
+		model.changeQuizCountries(Continent.ASIA);
 		assertEquals(0, model.index);
 	}
 	

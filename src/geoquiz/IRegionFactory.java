@@ -10,8 +10,14 @@ import java.util.Locale;
 
 import eu.hansolo.fx.world.Country;
 
-public class RegionFactory {
-	static Region regionFrom(Continent code, boolean lightweight) {
+enum Continent {
+	ASIA, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, EUROPE, AUSTRALIA, WORLD
+};
+
+public abstract class IRegionFactory {
+	abstract Region regionFrom(Continent code);
+	
+	protected Region makeCountry(Continent code, boolean lightweight) {
 		switch (code) {
 		case ASIA:
 			return new Asia(lightweight);
@@ -33,9 +39,17 @@ public class RegionFactory {
 	}
 }
 
-enum Continent {
-	ASIA, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, EUROPE, AUSTRALIA, WORLD
-};
+class RegionFactory extends IRegionFactory {
+	Region regionFrom(Continent code) {
+		return makeCountry(code, false);
+	}
+}
+
+class LightweightRegionFactory extends IRegionFactory {
+	Region regionFrom(Continent code) {
+		return makeCountry(code, true);
+	}
+}
 
 abstract class Region extends ArrayList<IQuizCountry> {
 	private static final long serialVersionUID = 1L;
