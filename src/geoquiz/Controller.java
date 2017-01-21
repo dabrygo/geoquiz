@@ -51,7 +51,9 @@ public class Controller extends Application {
 							view.correct.setText("Correct: " + model.correctTally);
 						}
 						else {
-							model.incorrectTally++;
+							if (model.getAnswerState().equals(AnswerState.UNKNOWN)) {
+								model.incorrectTally++;
+							}
 							view.incorrect.setText("Incorrect: " + model.incorrectTally);
 						}
 
