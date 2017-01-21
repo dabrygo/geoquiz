@@ -31,18 +31,17 @@ public class Controller extends Application {
         world = WorldBuilder.create().resolution(Resolution.HI_RES).mousePressHandler(evt -> {
             CountryPath countryPath = (CountryPath) evt.getSource();
             Locale locale = countryPath.getLocale();
-            String selectedIso = model.currentCountry().getAbbreviation();
+            String desiredIso = model.currentCountry().getAbbreviation();
 
             Country country = Country.valueOf(locale.getCountry());
             System.out.println(locale.getCountry());
-            System.out.println(selectedIso);
+            System.out.println(desiredIso);
             IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
             if (model.moreQuestionsInQuiz()) {
-                AnswerState answerState = selectedIso.equals(locale.getISO3Country()) ? AnswerState.CORRECT
+                AnswerState answerState = desiredIso.equals(locale.getISO3Country()) ? AnswerState.CORRECT
                         : AnswerState.INCORRECT;
                 model.setAnswerState(answerState);
-                view.correct.setText("Correct: " + model.getCorrectTally());
-                view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
+                view.updateStatistics(model.getCorrectTally(), model.getIncorrectTally());;
                 view.updateGuessedCountry(selectedQuizCountry, answerState);
             }
         }).zoomEnabled(true).selectionEnabled(true).build();
@@ -55,8 +54,7 @@ public class Controller extends Application {
                 model.changeQuizCountries(continent);
                 view.updateClueCountry(model.currentCountry());
                 view.updateProgress(model.index, model.quizCountries.size());
-                view.correct.setText("Correct: " + model.getCorrectTally());
-                view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
+                view.updateStatistics(model.getCorrectTally(), model.getIncorrectTally());;
             }
         });
 
@@ -75,8 +73,7 @@ public class Controller extends Application {
                 if (result.get() == ButtonType.OK) {
                     goToNextCountry();
                     model.setAnswerState(AnswerState.INCORRECT);
-                    view.correct.setText("Correct: " + model.getCorrectTally());
-                    view.incorrect.setText("Incorrect: " + model.getIncorrectTally());
+                    view.updateStatistics(model.getCorrectTally(), model.getIncorrectTally());;
                 }
             } else {
                 goToNextCountry();

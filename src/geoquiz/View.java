@@ -37,8 +37,8 @@ public class View extends SplitPane {
     private Button previousButton;
     private FlowPane right;
     private Text result;
-    Text correct;
-    Text incorrect;
+    private Text correct;
+    private Text incorrect;
 
     public View(World world, IQuizCountry initialCountry) {
         setOrientation(Orientation.VERTICAL);
@@ -143,6 +143,11 @@ public class View extends SplitPane {
         clues.updateCountry(selectedCountry);
     }
 
+    public void updateStatistics(int correct, int incorrect) {
+        this.correct.setText("Correct: " + correct);     
+        this.incorrect.setText("Incorrect: " + incorrect);
+    }
+    
     public Button getPreviousButton() {
         return previousButton;
     }
