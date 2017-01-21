@@ -59,6 +59,7 @@ abstract class Region extends ArrayList<IQuizCountry> {
 	
 	private void assignCountries() {
 		HashMap<String, Country> codesToNames = assignCountriesToNames();
+		handleSpecialCases(codesToNames);
 		try {
 			String line;
 			BufferedReader reader = new BufferedReader(new FileReader(Paths.get("rsc", "geoquiz", getFileName() + ".txt").toFile()));
@@ -77,7 +78,79 @@ abstract class Region extends ArrayList<IQuizCountry> {
 			e.printStackTrace();
 		}
 	}
-	
+
+	private void handleSpecialCases(HashMap<String, Country> codesToNames) {
+		handleAsiaSpecialCases(codesToNames);
+		handleAfricaSpecialCases(codesToNames);
+		handleNorthAmericaSpecialCases(codesToNames);
+		handleSouthAmericaSpecialCases(codesToNames);
+		handleEuropeSpecialCases(codesToNames);
+		handleAustraliaSpecialCases(codesToNames);
+	}
+
+	private void handleAsiaSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("Abkhazia", Country.GE); // partially recognized state
+		codesToNames.put("Akrotiri and Dhekelia", Country.GR); // minoan bronze age settlement 
+		codesToNames.put("Cocos (Keeling) Islands", Country.CC); 
+		codesToNames.put("East Timor (Timor-Leste)", Country.TL); 
+		codesToNames.put("Macau", Country.CA); // autonomous territory of china
+		codesToNames.put("Myanmar (Burma)", Country.MM);
+		codesToNames.put("Nagorno-Karabakh", Country.AZ); // disputed territory
+		codesToNames.put("Northern Cyprus", Country.CY);
+		codesToNames.put("South Ossetia", Country.GE);// partially recognized state
+	}
+
+	private void handleAfricaSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("Congo (Congo-Brazzaville)", Country.CG);
+		codesToNames.put("Democratic Republic of the Congo (Congo-Kinshasa)", Country.CD);
+		codesToNames.put("Ivory Coast (Côte d'Ivoire)", Country.CI);
+		codesToNames.put("Réunion", Country.RE);
+		codesToNames.put("Sahrawi Arab Democratic Republic", Country.EH);
+		codesToNames.put("Saint Helena| Ascension and Tristan da Cunha", Country.SH);
+		codesToNames.put("São Tomé and Príncipe", Country.ST);
+		codesToNames.put("Somaliland", Country.SO); // Disputed territory
+	}
+
+	private void handleNorthAmericaSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("Bonaire", Country.BQ);
+		codesToNames.put("Saba", Country.BQ);
+		codesToNames.put("Sint Eustatius", Country.BQ);
+		codesToNames.put("Clipperton Island", Country.MX);
+		codesToNames.put("Navassa Island", Country.HT);
+		codesToNames.put("Saint Kitts and Nevis", Country.KN);
+		codesToNames.put("Saint Pierre and Miquelon", Country.PM);
+		codesToNames.put("Saint Vincent and the Grenadines", Country.VC);
+		codesToNames.put("Sint Maarten", Country.SX);
+		codesToNames.put("Turks and Caicos Islands", Country.TC);
+	}
+
+	private void handleSouthAmericaSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("South Georgia and the South Sandwich Islands", Country.GS);
+	}
+
+	private void handleEuropeSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("Isle of Man", Country.IM);
+		codesToNames.put("Kosovo", Country.XK);
+		codesToNames.put("Svalbard", Country.SJ);
+		codesToNames.put("Transnistria", Country.MD); // recognized as part of moldova
+		codesToNames.put("Åland Islands", Country.AX);
+		codesToNames.put("Ã…land Islands", Country.AX);
+	}
+
+	private void handleAustraliaSpecialCases(HashMap<String, Country> codesToNames) {
+		codesToNames.put("Ashmore and Cartier Islands", Country.AU);
+		codesToNames.put("Coral Sea Islands", Country.AU);
+		codesToNames.put("Howland Island", Country.AU);
+		codesToNames.put("Jarvis Island", Country.AU);
+		codesToNames.put("Johnston Atoll", Country.AU);
+		codesToNames.put("Kingman Reef", Country.AU);
+		codesToNames.put("Midway Atoll", Country.AU);
+		codesToNames.put("Palmyra Atoll", Country.AU);
+		codesToNames.put("Baker Island", Country.AU);
+		codesToNames.put("Pitcairn Islands", Country.AU);
+		codesToNames.put("Wake Island", Country.AU);
+	}
+
 	private HashMap<String, Country> assignCountriesToNames() {
 		HashMap<String, Country> codesToNames = new HashMap<>();
 		for (Country country : Country.values()) {

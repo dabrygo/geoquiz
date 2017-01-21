@@ -32,7 +32,7 @@ public class Controller extends Application {
 					String selectedIso = model.currentCountry().getAbbreviation();
 
 					Country country = Country.valueOf(locale.getCountry());
-					System.out.println(locale.getISO3Country());
+					System.out.println(locale.getCountry());
 					System.out.println(selectedIso);
 					IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
 					if (!model.lastQuestion()){
