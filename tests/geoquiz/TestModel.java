@@ -98,4 +98,25 @@ public class TestModel {
 			assertFalse(locale.getDisplayCountry().equals(""));
 		}
 	}
+	
+	@Test
+	public void test_cannot_go_before_first_question() {
+		model.index = 0;
+		model.previousCountry();
+		assertEquals(0, model.index);
+	}
+	
+	@Test 
+	public void test_country_changes_when_going_forward() {
+		IQuizCountry firstCountry = model.currentCountry();
+		model.nextCountry();
+		assertFalse(firstCountry.equals(model.currentCountry()));
+	}
+	
+	@Test 
+	public void test_can_go_back_to_first_country() {
+		IQuizCountry firstCountry = model.currentCountry();
+		model.nextCountry();
+		assertEquals(firstCountry, model.previousCountry());
+	}
 }

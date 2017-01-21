@@ -26,7 +26,7 @@ public class Model {
 	}
 
 	public IQuizCountry currentCountry() {
-		if (index < 0 || index >= quizCountries.size()) {
+		if (index >= quizCountries.size()) {
 			return new NullCountry();
 		}
 		return quizCountries.get(index);
@@ -44,7 +44,7 @@ public class Model {
 	}
 
 	public IQuizCountry previousCountry() {
-		if (index >= 0) {
+		if (index > 0) {
 			index--;
 		}
 		return currentCountry();
@@ -53,9 +53,6 @@ public class Model {
 
 	public void changeQuizCountries(Continent regionCode) {
 		Region continent = regionFactory.regionFrom(regionCode);
-		if (continent == null) {
-			throw new IllegalArgumentException(String.format("Unknown region code '%s'", regionCode));
-		}
 		quizCountries = continent;
 		Collections.shuffle(quizCountries);
 		index = 0;
