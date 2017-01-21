@@ -14,9 +14,9 @@ public class Model {
 	int correctTally;
 	private AnswerState answerState;
 	int incorrectTally;
-	private AbstractRegionFactory regionFactory;
+	private IRegionFactory regionFactory;
 
-	public Model(AbstractRegionFactory regionFactory) {
+	public Model(IRegionFactory regionFactory) {
 		masterList = regionFactory.regionFrom(Continent.WORLD);
 		answerState = AnswerState.UNKNOWN;
 		correctTally = 0;
