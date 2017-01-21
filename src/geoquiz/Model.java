@@ -16,14 +16,14 @@ public class Model {
 	}
 
 	public IQuizCountry currentCountry() {
-		if (quizCountries == null) {
+		if (index < 0 || index >= quizCountries.size()) {
 			return new NullCountry();
 		}
 		return quizCountries.get(index);
 	}
 
 	public IQuizCountry nextCountry() {
-		if (!lastQuestion()) {
+		if (index <= quizCountries.size()) {
 			index++;
 		}
 		return currentCountry();
@@ -34,15 +34,12 @@ public class Model {
 	}
 
 	public IQuizCountry previousCountry() {
-		if (!firstQuestion()) {
+		if (index >= 0) {
 			index--;
 		}
 		return currentCountry();
 	}
 	
-	private boolean firstQuestion() {
-		return index == 0;
-	}
 
 	public void changeQuizCountries(Continent regionCode) {
 		Region continent = RegionFactory.regionFrom(regionCode);

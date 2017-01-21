@@ -28,7 +28,7 @@ public class TestModel {
 
 	@Test
 	public void test_nonempty_quiz_by_default() {
-		assertTrue(model.lastQuestion());
+		assertFalse(model.lastQuestion());
 	}
 
 	@Test
