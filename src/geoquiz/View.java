@@ -1,6 +1,7 @@
 package geoquiz;
 
 import eu.hansolo.fx.world.World;
+import geoquiz.Model.AnswerState;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -34,8 +35,6 @@ public class View extends SplitPane {
 	private Button previousButton;
 	private FlowPane right;
 	private Text result;
-
-	enum AnswerState {Correct, Incorrect, Unknown};
 	
 	public View(World world, IQuizCountry initialCountry) {
 		setOrientation(Orientation.VERTICAL);

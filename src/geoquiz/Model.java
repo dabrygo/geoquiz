@@ -5,13 +5,17 @@ import java.util.List;
 
 public class Model {
 	public static final Continent DEFAULT_CONTINENT = Continent.NORTH_AMERICA;
+
+	enum AnswerState {Correct, Incorrect, Unknown};
+	
 	List<IQuizCountry> masterList;
 	List<IQuizCountry> quizCountries;
 	int index;
+	private AnswerState answerState;
 
 	public Model() {
-		masterList = RegionFactory.regionFrom(Continent.WORLD, true);
-
+		masterList = RegionFactory.regionFrom(Continent.WORLD, false);
+		answerState = AnswerState.Unknown;
 		changeQuizCountries(DEFAULT_CONTINENT);
 	}
 
@@ -42,12 +46,20 @@ public class Model {
 	
 
 	public void changeQuizCountries(Continent regionCode) {
-		Region continent = RegionFactory.regionFrom(regionCode, true);
+		Region continent = RegionFactory.regionFrom(regionCode, false);
 		if (continent == null) {
 			throw new IllegalArgumentException(String.format("Unknown region code '%s'", regionCode));
 		}
 		quizCountries = continent;
 		Collections.shuffle(quizCountries);
 		index = 0;
+	}
+	
+	public void setAnswerState(AnswerState answerState) {
+		this.answerState = answerState;
+	}
+	
+	public AnswerState getAnswerState() {
+		return answerState;
 	}
 }

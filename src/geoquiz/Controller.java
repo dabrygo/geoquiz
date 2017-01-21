@@ -1,16 +1,20 @@
 package geoquiz;
 import java.util.Locale;
+import java.util.Optional;
 
 import eu.hansolo.fx.world.Country;
 import eu.hansolo.fx.world.CountryPath;
 import eu.hansolo.fx.world.World;
 import eu.hansolo.fx.world.World.Resolution;
-import geoquiz.View.AnswerState;
 import eu.hansolo.fx.world.WorldBuilder;
+import geoquiz.Model.AnswerState;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
 import javafx.stage.Stage;
 
@@ -39,6 +43,7 @@ public class Controller extends Application {
 						AnswerState answerState = selectedIso.equals(locale.getISO3Country())
 												? AnswerState.Correct
 												: AnswerState.Incorrect;
+						model.setAnswerState(answerState);
 						view.updateGuessedCountry(selectedQuizCountry, answerState);
 					}
 				})
@@ -62,7 +67,20 @@ public class Controller extends Application {
 		});
 		
 		view.getNextButton().setOnAction(e -> {
-			goToNextCountry();
+			if (!model.getAnswerState().equals(AnswerState.Correct)) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Skip Country");
+				alert.setHeaderText("");
+				alert.setContentText("Do you want to skip this country?");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					goToNextCountry();
+				} 
+			}
+			else {
+				goToNextCountry();
+			}
 		});
 
 		Scene scene = new Scene(view);
@@ -76,12 +94,14 @@ public class Controller extends Application {
 		view.updateClueCountry(model.previousCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
 		view.updateGuessedCountry(new NullCountry(), AnswerState.Unknown);
+		model.setAnswerState(AnswerState.Unknown);
 	}
 
 	private void goToNextCountry() {
 		view.updateClueCountry(model.nextCountry());
 		view.updateProgress(model.index, model.quizCountries.size());
 		view.updateGuessedCountry(new NullCountry(), AnswerState.Unknown);
+		model.setAnswerState(AnswerState.Unknown);
 	}
 	
 	@Override 
