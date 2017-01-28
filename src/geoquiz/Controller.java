@@ -116,6 +116,7 @@ public class Controller extends Application {
         view.updateClueCountry(model.nextCountry(model.getAnswerState()));
         view.updateProgress(model.index, model.quizCountries.size());
         view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
+        world.resetZoom();
     }
 
     @Override
