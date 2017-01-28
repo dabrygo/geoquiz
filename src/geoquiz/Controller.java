@@ -24,6 +24,7 @@ public class Controller extends Application {
     private Model model;
     private View view;
     private CountryPath countryPath;
+    private Country pressedCountry;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -35,10 +36,8 @@ public class Controller extends Application {
             Locale locale = countryPath.getLocale();
             String desiredIso = model.currentCountry().getAbbreviation();
 
-            Country country = Country.valueOf(locale.getCountry());
-            System.out.println(locale.getCountry());
-            System.out.println(desiredIso);
-            IQuizCountry selectedQuizCountry = model.masterList.get(country.ordinal());
+            pressedCountry = Country.valueOf(locale.getCountry());
+            IQuizCountry selectedQuizCountry = model.masterList.get(pressedCountry.ordinal());
             if (model.moreQuestionsInQuiz()) {
                 AnswerState answerState = desiredIso.equals(locale.getISO3Country()) ? AnswerState.CORRECT
                         : AnswerState.INCORRECT;
@@ -60,8 +59,23 @@ public class Controller extends Application {
             }
         });
 
+        assignActionsToNavigationButtons();
+
+        Scene scene = new Scene(view);
+
+        stage.setTitle("World Map");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void assignActionsToNavigationButtons() {
         view.getPreviousButton().setOnAction(e -> {
             goToPreviousCountry();
+        });
+        
+        view.getShowAnswerButton().setOnAction(e -> {
+            model.currentCountry().setColor(Color.rgb(157,255,120));
+            world.zoomToCountry(model.currentCountry().getCountry());
         });
 
         view.getNextButton().setOnAction(e -> {
@@ -81,12 +95,6 @@ public class Controller extends Application {
                 goToNextCountry();
             }
         });
-
-        Scene scene = new Scene(view);
-
-        stage.setTitle("World Map");
-        stage.setScene(scene);
-        stage.show();
     }
 
     private void goToPreviousCountry() {

@@ -39,9 +39,11 @@ public class View extends SplitPane {
     private Text result;
     private Text correct;
     private Text incorrect;
+    private Button showAnswerButton;
 
     public View(World world, IQuizCountry initialCountry) {
         setOrientation(Orientation.VERTICAL);
+        setDividerPosition(0, 0.75); // needed to center zoom into country
 
         clues = new CountryDisplay(initialCountry);
 
@@ -80,11 +82,14 @@ public class View extends SplitPane {
 
     private HBox makeNavigationButtons() {
         previousButton = new Button("Previous");
+        showAnswerButton = new Button("Show Answer");
         nextButton = new Button("Next");
-        HBox navigator = new HBox(previousButton, nextButton);
+        HBox navigator = new HBox(previousButton, showAnswerButton, nextButton);
         HBox.setHgrow(previousButton, Priority.ALWAYS);
+        HBox.setHgrow(showAnswerButton, Priority.ALWAYS);
         HBox.setHgrow(nextButton, Priority.ALWAYS);
         previousButton.setMaxWidth(Double.MAX_VALUE);
+        showAnswerButton.setMaxWidth(Double.MAX_VALUE);
         nextButton.setMaxWidth(Double.MAX_VALUE);
         return navigator;
     }
@@ -166,5 +171,9 @@ public class View extends SplitPane {
         alert.setHeaderText("");
         alert.setContentText("Do you want to skip this country?");
         return alert;
+    }
+    
+    public Button getShowAnswerButton() {
+        return showAnswerButton;
     }
 }

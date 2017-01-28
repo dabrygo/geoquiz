@@ -10,24 +10,31 @@ import java.util.MissingResourceException;
 
 import eu.hansolo.fx.world.Country;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import png250px.Png250px;
 
 public interface IQuizCountry {
     Image getFlag();
 
+    Country getCountry();
+    
     String getCapital();
 
     String getName();
 
     String getAbbreviation();
+
+    void setColor(Color COLOR);
 }
 
 class QuizCountry implements IQuizCountry {
     protected String iso3name;
     protected String name;
+    private Country country;
 
     public QuizCountry(Country country) {
         Locale locale = new Locale("", country.name());
+        this.country = country;
         name = locale.getDisplayCountry();
         try {
             iso3name = locale.getISO3Country();
@@ -58,6 +65,16 @@ class QuizCountry implements IQuizCountry {
 
     public String toString() {
         return iso3name;
+    }
+
+    @Override
+    public Country getCountry() {
+        return country;
+    }
+
+    @Override
+    public void setColor(Color COLOR) {
+        country.setColor(COLOR);
     }
 }
 
@@ -146,4 +163,12 @@ class NullCountry implements IQuizCountry {
     public String getAbbreviation() {
         return "";
     }
+
+    @Override
+    public Country getCountry() {
+        return null;
+    }
+
+    @Override
+    public void setColor(Color COLOR) { }
 }
