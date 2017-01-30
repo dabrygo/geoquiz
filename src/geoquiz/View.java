@@ -7,6 +7,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Toggle;
@@ -32,20 +33,21 @@ public class View extends SplitPane {
     private Text progress;
     private ToggleGroup regions;
     private Button nextButton;
-    private CountryDisplay clues;
-    private CountryDisplay guessed;
+    CountryDisplay clueCountryDisplay;
+    CountryDisplay guessedCountryDisplay;
     private Button previousButton;
     private FlowPane right;
     private Text result;
     private Text correct;
     private Text incorrect;
     private Button showAnswerButton;
+    CheckBox[] clueTypes;
 
     public View(World world, IQuizCountry initialCountry) {
         setOrientation(Orientation.VERTICAL);
         setDividerPosition(0, 0.75); // needed to center zoom into country
 
-        clues = new CountryDisplay(initialCountry);
+        clueCountryDisplay = new CountryDisplay(initialCountry);
 
         makeCenter();
 
@@ -56,8 +58,8 @@ public class View extends SplitPane {
         correct.setFont(new Font(24.0));
         incorrect = new Text("Incorrect: " + 0);
         incorrect.setFont(new Font(24.0));
-        guessed = new CountryDisplay(new NullCountry());
-        right.getChildren().addAll(guessed);
+        guessedCountryDisplay = new CountryDisplay(new NullCountry());
+        right.getChildren().addAll(guessedCountryDisplay);
 
         bottom = new BorderPane();
 
@@ -67,10 +69,10 @@ public class View extends SplitPane {
         correct.setTextAlignment(TextAlignment.LEFT);
         HBox top = new HBox(incorrect, result, correct);
         bottom.setTop(top);
-        bottom.setLeft(clues);
+        bottom.setLeft(clueCountryDisplay);
         bottom.setCenter(center);
-        bottom.setRight(guessed);
-        BorderPane.setAlignment(guessed, Pos.TOP_LEFT);
+        bottom.setRight(guessedCountryDisplay);
+        BorderPane.setAlignment(guessedCountryDisplay, Pos.TOP_LEFT);
         bottom.setBottom(navigator);
 
         StackPane map = new StackPane(world);
@@ -111,7 +113,13 @@ public class View extends SplitPane {
 
         progress = new Text();
         progress.setFont(new Font(36.0));
-        center = new VBox(progress, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld);
+        
+        clueTypes = new CheckBox[3];
+        clueTypes[0] = new CheckBox("Name");
+        clueTypes[1] = new CheckBox("Capital");
+        clueTypes[2] = new CheckBox("Flag");
+        
+        center = new VBox(progress, asia, africa, northAmerica, southAmerica, europe, australia, wholeWorld, clueTypes[0], clueTypes[1], clueTypes[2]);
     }
 
     private RadioButton newRegion(String name, Continent continent) {
@@ -141,11 +149,11 @@ public class View extends SplitPane {
             result.setFill(null);
         }
         result.setText(resultText);
-        guessed.updateCountry(selectedCountry);
+        guessedCountryDisplay.updateCountry(selectedCountry);
     }
 
     public void updateClueCountry(IQuizCountry selectedCountry) {
-        clues.updateCountry(selectedCountry);
+        clueCountryDisplay.updateCountry(selectedCountry);
     }
 
     public void updateStatistics(int correct, int incorrect) {
@@ -175,5 +183,21 @@ public class View extends SplitPane {
     
     public Button getShowAnswerButton() {
         return showAnswerButton;
+    }
+
+    public void showOrHideNames() {
+        clueCountryDisplay.showNames(clueTypes[0].isSelected());
+        guessedCountryDisplay.showNames(clueTypes[0].isSelected());
+    }
+    
+    public void showOrHideCapitals() {
+        clueCountryDisplay.showCapital(clueTypes[1].isSelected());
+        guessedCountryDisplay.showCapital(clueTypes[1].isSelected());
+    }
+
+    public void showOrHideFlags() {
+        clueCountryDisplay.showFlag(clueTypes[2].isSelected());
+        guessedCountryDisplay.showFlag(clueTypes[2].isSelected());
+        
     }
 }

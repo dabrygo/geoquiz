@@ -33,12 +33,24 @@ public class CountryDisplay extends FlowPane {
         nameText.setText("Name: " + name);
     }
 
+    public void showNames(boolean show) {
+        nameText.setVisible(show);
+    }
+
     public void setCapital(String capital) {
         capitalText.setText("Capital: " + capital);
+    }
+    
+    public void showCapital(boolean show) {
+        capitalText.setVisible(show);
     }
 
     public void setFlag(Image flag) {
         flagImage.setImage(flag);
+    }
+
+    public void showFlag(boolean show) {
+        flagImage.setVisible(show);
     }
 
     public void updateCountry(IQuizCountry theNextCountry) {

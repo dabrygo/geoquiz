@@ -58,6 +58,18 @@ public class Controller extends Application {
                 view.updateStatistics(model.getCorrectTally(), model.getIncorrectTally());;
             }
         });
+        
+        view.clueTypes[0].setSelected(model.showName);        
+        view.showOrHideNames();
+        view.clueTypes[0].setOnAction(e -> view.showOrHideNames());
+        
+        view.clueTypes[1].setSelected(model.showCapital);
+        view.showOrHideCapitals();
+        view.clueTypes[1].setOnAction(e -> view.showOrHideCapitals());
+        
+        view.clueTypes[2].setSelected(model.showFlag);
+        view.showOrHideFlags();        
+        view.clueTypes[2].setOnAction(e -> view.showOrHideFlags());
 
         assignActionsToNavigationButtons();
 
