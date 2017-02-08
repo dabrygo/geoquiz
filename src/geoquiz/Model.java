@@ -23,6 +23,7 @@ public class Model {
     boolean showName;
     boolean showCapital;
     boolean showFlag;
+    boolean hasSeenAllQuestions = false;
 
     public Model(IRegionFactory regionFactory) {
         masterList = regionFactory.regionFrom(Continent.WORLD);
@@ -56,6 +57,10 @@ public class Model {
             answerStates[index] = answerState;
             index++;
         }
+        else if (getIndexOfNextIncorrectCountry() >= 0) {
+            hasSeenAllQuestions = true;
+            index = getIndexOfNextIncorrectCountry();
+        }
         return currentCountry();
     }
     
@@ -65,7 +70,7 @@ public class Model {
     }
 
     boolean moreQuestionsInQuiz() {
-        return index < quizCountries.size();
+        return index < quizCountries.size() && !hasSeenAllQuestions;
     }
 
     public boolean hasReviewableQuestions() {
@@ -94,11 +99,14 @@ public class Model {
     }
 
     public AnswerState getAnswerState() {
+        if (index >= answerStates.length) {
+            return AnswerState.UNKNOWN;
+        }
         return answerStates[index];
     }
     
     public int getIndexOfNextIncorrectCountry() {
-        for (int i = index; i < quizCountries.size(); i++) {
+        for (int i = index + 1; i < quizCountries.size(); i++) {
             if (answerStates[i].equals(AnswerState.INCORRECT)) {
                 return i;
             }

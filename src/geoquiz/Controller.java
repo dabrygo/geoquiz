@@ -95,10 +95,15 @@ public class Controller extends Application {
         view.getNextButton().setOnAction(e -> {
             if (!model.moreQuestionsInQuiz()) {
                 if (model.hasReviewableQuestions()) {
-                    Alert alert = view.reviewIncorrectDialog();
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        goToCountry(model.getIndexOfNextIncorrectCountry());
+                    if (!model.hasSeenAllQuestions) {
+                        Alert alert = view.reviewIncorrectDialog();
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK) {
+                            goToNextCountry();
+                        }
+                    }
+                    else {
+                        goToNextCountry();
                     }
                 }
                 return;
@@ -115,14 +120,6 @@ public class Controller extends Application {
                 goToNextCountry();
             }
         });
-    }
-
-    private void goToCountry(int index) {
-        if (index >= 0) {
-            IQuizCountry country = model.country(index);
-            view.updateClueCountry(country);
-            view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
-        }
     }
 
     private void goToPreviousCountry() {
