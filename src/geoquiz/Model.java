@@ -58,9 +58,18 @@ public class Model {
         }
         return currentCountry();
     }
+    
+    public IQuizCountry country(int i) {
+        index = i;
+        return quizCountries.get(i);
+    }
 
     boolean moreQuestionsInQuiz() {
         return index < quizCountries.size();
+    }
+
+    public boolean hasReviewableQuestions() {
+        return Arrays.stream(answerStates).anyMatch(state -> state.equals(AnswerState.INCORRECT));
     }
 
     public IQuizCountry previousCountry() {
@@ -71,8 +80,7 @@ public class Model {
     }
 
     public void changeQuizCountries(Continent regionCode) {
-        Region continent = regionFactory.regionFrom(regionCode);
-        quizCountries = continent;
+        quizCountries = regionFactory.regionFrom(regionCode);
         Collections.shuffle(quizCountries);
         index = 0;
         answerStates = new AnswerState[quizCountries.size()];
@@ -87,6 +95,20 @@ public class Model {
 
     public AnswerState getAnswerState() {
         return answerStates[index];
+    }
+    
+    public int getIndexOfNextIncorrectCountry() {
+        for (int i = index; i < quizCountries.size(); i++) {
+            if (answerStates[i].equals(AnswerState.INCORRECT)) {
+                return i;
+            }
+        }
+        for (int i = 0; i < index; i++) {
+            if (answerStates[i].equals(AnswerState.INCORRECT)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int getCorrectTally() {

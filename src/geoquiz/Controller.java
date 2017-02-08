@@ -42,6 +42,7 @@ public class Controller extends Application {
                 AnswerState answerState = desiredIso.equals(locale.getISO3Country()) ? AnswerState.CORRECT
                         : AnswerState.INCORRECT;
                 model.setAnswerState(answerState);
+              
                 view.updateStatistics(model.getCorrectTally(), model.getIncorrectTally());;
                 view.updateGuessedCountry(selectedQuizCountry, answerState);
             }
@@ -93,11 +94,17 @@ public class Controller extends Application {
 
         view.getNextButton().setOnAction(e -> {
             if (!model.moreQuestionsInQuiz()) {
+                if (model.hasReviewableQuestions()) {
+                    Alert alert = view.reviewIncorrectDialog();
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        goToCountry(model.getIndexOfNextIncorrectCountry());
+                    }
+                }
                 return;
             }
             if (!model.getAnswerState().equals(AnswerState.CORRECT)) {
                 Alert alert = view.skipCountryDialog();
-
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
                     goToNextCountry();
@@ -108,6 +115,14 @@ public class Controller extends Application {
                 goToNextCountry();
             }
         });
+    }
+
+    private void goToCountry(int index) {
+        if (index >= 0) {
+            IQuizCountry country = model.country(index);
+            view.updateClueCountry(country);
+            view.updateGuessedCountry(new NullCountry(), AnswerState.UNKNOWN);
+        }
     }
 
     private void goToPreviousCountry() {

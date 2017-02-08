@@ -174,10 +174,22 @@ public class View extends SplitPane {
     }
 
     public Alert skipCountryDialog() {
+        return confirmationDialog("Skip Country", "", "Do you want to skip this country?");
+    }
+    
+    public Alert reviewIncorrectDialog() {
+        return confirmationDialog("Review Incorrect Questions", "", "Do you want to review incorrect countries?");
+    }
+    
+    public Alert allCorrectDialog() {
+        return confirmationDialog("No More Review Questions", "", "All questions answered correctly. Continue to next country?");
+    }
+    
+    private Alert confirmationDialog(String title, String header, String content) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Skip Country");
-        alert.setHeaderText("");
-        alert.setContentText("Do you want to skip this country?");
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
         return alert;
     }
     
