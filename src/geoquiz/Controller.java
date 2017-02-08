@@ -87,6 +87,7 @@ public class Controller extends Application {
         
         view.getShowAnswerButton().setOnAction(e -> {
             model.currentCountry().setColor(Color.rgb(157,255,120));
+            world.resetZoom(); // FIXME Don't reset zoom to zoom into country
             world.zoomToCountry(model.currentCountry().getCountry());
         });
 
