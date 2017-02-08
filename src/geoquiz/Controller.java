@@ -38,7 +38,7 @@ public class Controller extends Application {
 
             pressedCountry = Country.valueOf(locale.getCountry());
             IQuizCountry selectedQuizCountry = model.masterList.get(pressedCountry.ordinal());
-            if (model.moreQuestionsInQuiz()) {
+            if (model.moreQuestionsInQuiz() || model.getIndexOfNextIncorrectCountry() >= 0) {
                 AnswerState answerState = desiredIso.equals(locale.getISO3Country()) ? AnswerState.CORRECT
                         : AnswerState.INCORRECT;
                 model.setAnswerState(answerState);
